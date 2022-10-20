@@ -27,5 +27,5 @@ print(all_sales_report)
 print(wholesale_report)
 print(stores_report)
 
-print('Test commit')
+print(dataframe_container.products_yield)
 

@@ -11,7 +11,8 @@ class AnalyticsDataSource:
             costs= self.__provide_costs_dataframe(),
             production_resource= self.__provide_production_resource_dataframe(),
             products= self.__provide_products_name(),
-            stores= self.__provide_stores()
+            stores= self.__provide_stores(),
+            products_yield= self.__provide_yelds()
         )
         return container
 
@@ -50,4 +51,16 @@ class AnalyticsDataSource:
             stores = {int(k): v for k, v in json.load(f).items()}
 
         return stores
+
+    def __provide_yelds(self):
+        with open('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/uzyski.txt') as f:
+            products_yield = {int(k): v for k, v in json.load(f).items()}
+
+        products_names = self.__provide_products_name()
+        products_yield_dataframe = pd.DataFrame(products_yield.values(), index= products_yield.keys(), columns = ['Yield'])
+
+        products_yield_dataframe['TOWAR'] = products_yield_dataframe.index.map(products_names)
+
+        return products_yield_dataframe
+
 
