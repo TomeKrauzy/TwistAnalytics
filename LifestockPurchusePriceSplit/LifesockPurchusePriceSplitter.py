@@ -1,6 +1,3 @@
-import pandas as pd
-
-
 class LifestockPurchusePriceSplitter():
 
     def __init__(self, production_resource_dataframe, avg_sales_prices, products_yield, avg_lifestock_price):
@@ -20,13 +17,19 @@ class LifestockPurchusePriceSplitter():
         products_yield = products_yield.set_index('TOWAR')
 
         df = products_yield.join(self.avg_sales_prices)
-        df['dochód_ze_sprzedaży_kg_żywca'] = df['ŚR_CENA'] * df['Yield']
-        df['% udział_w_zysku_ze_sprzedaży'] = df['dochód_ze_sprzedaży_kg_żywca'] / df['dochód_ze_sprzedaży_kg_żywca'].iloc[1:].sum()
-        df['Udział_ceny_zakupu'] = df['% udział_w_zysku_ze_sprzedaży'] * self.avg_lifestock_price
+        df['zysk ze sprzedaży kg żywca[zł]'] = df['ŚR_CENA'] * df['Yield']
+        df['% udział_w_zysku_ze_sprzedaży'] = df['zysk ze sprzedaży kg żywca[zł]'] / df['zysk ze sprzedaży kg żywca[zł]'].iloc[1:].sum()
+        df['Wielkość ceny zakupu [% udział w zysku * cena zakupu]'] = df['% udział_w_zysku_ze_sprzedaży'] * self.avg_lifestock_price
+
+        # Tutaj dla tuszki trzeba zmienić bo jak ją sprzedam to nie moge uzyskac innych elementów
+        # Czyli wielkość ceny zakupu to cena żywca - potroby
+        x = (self.avg_lifestock_price - df.loc[df.index == 'Wątroba', 'zysk ze sprzedaży kg żywca[zł]'].item())
+        y = df.loc[df.index == 'Serce', 'zysk ze sprzedaży kg żywca[zł]'].item()
+        z = df.loc[df.index == 'Żołądek', 'zysk ze sprzedaży kg żywca[zł]'].item()
+        df.loc[df.index == 'Tuszka', 'Wielkość ceny zakupu [% udział w zysku * cena zakupu]'] = x - y - z
+
+        # Ostateczna kolumna przypsująca kg produktu odpowiednią cene zakupu w oparciu o śr cene żywca
+        df['koszt_pozyskania_towaru [zł/kg]'] = df['Wielkość ceny zakupu [% udział w zysku * cena zakupu]'] / df['Yield']
 
         return df
-
-
-
-
 
