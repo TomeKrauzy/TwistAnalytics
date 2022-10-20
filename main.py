@@ -5,6 +5,8 @@ from Reports.Average.AverageSalesPricesReportScope import AverageSalesPricesRepo
 from Reports.Sales.SalesReportScope import SalesReportScope
 from Reports.Sales.SalesReportGenerator import SalesReportGenerator
 
+from Reports.Average.AverageLifestockPriceGenerator import AverageLifestockPriceGenerator
+
 # tworze instancje analyticsDataSource i wywołuje metode provide, która dostarcza
 # dataframe_container(zawiera wszystkie potrzebne do obliczeń dataframy)
 analytics_data_source = DataSource.AnalyticsDataSource()
@@ -23,9 +25,14 @@ sales_generator = SalesReportGenerator(dataframe_container.sales, dataframe_cont
 
 all_sales_report = sales_generator.generate(SalesReportScope.ALL)
 
-print(all_sales_report)
-print(wholesale_report)
-print(stores_report)
 
-print(dataframe_container.products_yield)
+average_lifestock_price_generator = AverageLifestockPriceGenerator(dataframe_container.lifestock)
+avg_lifestock_price = average_lifestock_price_generator.provide_avg_lifestock_purchuse_price()
 
+
+from LifestockPurchusePriceSplit.LifesockPurchusePriceSplitter import LifestockPurchusePriceSplitter
+
+
+lifestock_purchuse_price_splitter = LifestockPurchusePriceSplitter(dataframe_container.production, average_generator.generate(AverageSalesPricesReportScope.WHOLESALE), dataframe_container.products_yield, avg_lifestock_price)
+
+print(lifestock_purchuse_price_splitter.split_lifestock_purchuse_price())

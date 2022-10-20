@@ -1,21 +1,23 @@
 import json
+
 import pandas as pd
+
 from DataSource.DataFrameContainer import DataFrameContainer
+
 
 class AnalyticsDataSource:
 
     def provide(self):
         container = DataFrameContainer(
-            sales= self.__provide_sales_dataframe(),
-            production= self.__provide_production_dataframe(),
-            costs= self.__provide_costs_dataframe(),
-            production_resource= self.__provide_production_resource_dataframe(),
-            products= self.__provide_products_name(),
-            stores= self.__provide_stores(),
-            products_yield= self.__provide_yelds()
+            sales=self.__provide_sales_dataframe(),
+            production=self.__provide_production_dataframe(),
+            costs=self.__provide_costs_dataframe(),
+            lifestock=self.__provide_lifestock_dataframe(),
+            products=self.__provide_products_name(),
+            stores=self.__provide_stores(),
+            products_yield=self.__provide_yelds()
         )
         return container
-
 
     def __provide_sales_dataframe(self):
         sales_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/Pandas/TWIST/08.CSV', encoding='latin1', sep=';')
@@ -32,9 +34,12 @@ class AnalyticsDataSource:
         sales_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/Pandas/TWIST/08.CSV', encoding='latin1', sep=';')
         return sales_df
 
-    def __provide_production_resource_dataframe(self):
-        sales_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/Pandas/TWIST/08.CSV', encoding='latin1', sep=';')
-        return sales_df
+    def __provide_lifestock_dataframe(self):
+        lifestock_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/żywiec.CSV', encoding='latin1', sep=';')
+        lifestock_df[['WARTOSC']] = lifestock_df[['WARTOSC']].apply(
+            lambda x: x.str.replace(',', '.'))
+        lifestock_df[['ILOSC', 'WARTOSC']] = lifestock_df[['ILOSC', 'WARTOSC']].astype(float)
+        return lifestock_df
 
     def __provide_production_dataframe(self):
         sales_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/Pandas/TWIST/08.CSV', encoding='latin1', sep=';')
@@ -57,10 +62,7 @@ class AnalyticsDataSource:
             products_yield = {int(k): v for k, v in json.load(f).items()}
 
         products_names = self.__provide_products_name()
-        products_yield_dataframe = pd.DataFrame(products_yield.values(), index= products_yield.keys(), columns = ['Yield'])
-
+        products_yield_dataframe = pd.DataFrame(products_yield.values(), index=products_yield.keys(), columns=['Yield'])
         products_yield_dataframe['TOWAR'] = products_yield_dataframe.index.map(products_names)
 
         return products_yield_dataframe
-
-
