@@ -31,8 +31,17 @@ class AnalyticsDataSource:
         return sales_df
 
     def __provide_costs_dataframe(self):
-        sales_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/Pandas/TWIST/08.CSV', encoding='latin1', sep=';')
-        return sales_df
+        costs_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/costs_5.CSV', encoding='latin1', sep=';')
+        costs_df.columns.values[0] = 'KONTO'
+        costs_df.columns.values[1] = "KATEGORIA"
+        costs_df.columns.values[
+            4] = "WINIEN_MSC"  # co jeśli wezme za okres 2msc, czy ta kolumna będzie przestawiała te 2 msc?
+        costs_df.columns.values[8] = "WINIEN_NARASTAJĄCO"
+        costs_df = costs_df.iloc[:, [0, 1, 4, 8]]
+        zmiana = {'£': 'ł', '¯': 'ż'}
+        costs_df = costs_df.replace(zmiana, regex=True)
+
+        return costs_df
 
     def __provide_lifestock_dataframe(self):
         lifestock_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/żywiec.CSV', encoding='latin1', sep=';')
