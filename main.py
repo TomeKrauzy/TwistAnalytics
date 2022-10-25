@@ -42,4 +42,6 @@ costs_categorizer = CostsCategorizer(dataframe_container.costs)
 
 costs_container =  costs_categorizer.provide_data()
 
-print(type(costs_container.slaughter.total_costs))
+
+
+print(costs_container.slaughter.labour)
