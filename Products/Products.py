@@ -1,10 +1,22 @@
-from abc import ABC, abstractmethod
+from DataSource.AnalyticsDataSource import AnalyticsDataSource
 
-class Product(ABC):
+
+class ProductionParameters():
+
+    products_yelds = AnalyticsDataSource().provide().products_yield
     labor_hour_cost = 50
+    avg_lifestock_weight = 3
+
+    # carcass/hour
+    confectionery_speed = 2760
+    # lifestock/hour
+    slaughter_speed = 3720
+    # breast line speed, cone/hour
+    breast_speed = 2520
+
 
 # Tuszka
-class Carcass(Product):
+class Carcass(ProductionParameters):
 
     """
     Class for Carcess used for further confection
@@ -16,6 +28,9 @@ class Carcass(Product):
         self.labour = self.__provide_labour_amount()
         # How much brest is produced in hour
         self.production_efficiency = 42 * 60
+
+    def provide_labour_cost_markup(self):
+        pass
 
     def __provide_labour_amount(self):
 
@@ -59,7 +74,7 @@ class Carcass_sale(Carcass):
 
 
 # Żołądki
-class Gizzards(Product):
+class Gizzards(ProductionParameters):
 
     def __int__(self):
         super.__init__()
@@ -68,7 +83,7 @@ class Gizzards(Product):
         # How much brest is produced in hour
         self.production_efficiency = 42 * 60
 
-class Liver(Product):
+class Liver(ProductionParameters):
 
     def __int__(self):
         super.__init__()
@@ -77,7 +92,7 @@ class Liver(Product):
         # How much brest is produced in hour
         self.production_efficiency = 42 * 60
 
-class Heart(Product):
+class Heart(ProductionParameters):
 
     def __int__(self):
         super.__init__()
@@ -86,26 +101,26 @@ class Heart(Product):
         # How much brest is produced in hour
         self.production_efficiency = 42 * 60
 
-class Wing(Product):
+class Wing(ProductionParameters):
 
     def __int__(self):
         super.__init__()
         # How much people are involved in production process
-        self.labour = 2
+        self.labour = 1
         # How much brest is produced in hour
         self.production_efficiency = 42 * 60
 
 
-class Quarter(Product):
+class Quarter(ProductionParameters):
 
     def __int__(self):
         super.__init__()
         # How much people are involved in production process
-        self.labour = 2
+        self.labour = 1
         # How much brest is produced in hour
         self.production_efficiency = 42 * 60
 
-class Breast(Product):
+class Breast(ProductionParameters):
 
     def __int__(self):
         super.__init__()
@@ -115,11 +130,12 @@ class Breast(Product):
         self.production_efficiency = 42 * 60
 
 
-class Portion(Product):
+class Portion(ProductionParameters):
 
     def __int__(self):
         super.__init__()
         # How much people are involved in production process
-        self.labour = 2
+        self.labour = 1
         # How much brest is produced in hour
         self.production_efficiency = 42 * 60
+
