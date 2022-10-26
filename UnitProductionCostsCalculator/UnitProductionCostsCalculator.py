@@ -16,6 +16,7 @@ class UnitProductionCostsCalculator():
 
 
     def calculate(self):
-        print(yelds)
+        print(self.yelds)
+
 
 
