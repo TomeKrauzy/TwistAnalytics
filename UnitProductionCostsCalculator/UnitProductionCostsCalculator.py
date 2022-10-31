@@ -1,27 +1,84 @@
 from Products.Products import *
 import pandas as pd
+from CostsCategorizer.CostsCategorizer import CostsCategorizer
+from DataSource.AnalyticsDataSource import AnalyticsDataSource
 
 class UnitProductionCostsCalculator():
 
+    """
+    This class combines labour_markup and costs markup.
+
+    External function: calculate() returns DataFrame with UnitProductionCost for all base elements
+
+    Important information:
+
+        labour_markup is collected from Product classes.
+
+    """
+
     def __init__(self):
 
+        self.costs_dataframe = CostsCategorizer(AnalyticsDataSource().provide().costs).provide_data()
         self.yelds = ProductionParameters().products_yelds
 
     def calculate(self):
         """
         :return: pd.Series with product id as index and UPC as value
         """
-        df = pd.concat([self.__provide_carcass_UPC(), self.__provide_quarter_UPC()])
+        df = pd.concat([self.__provide_carcass_UPC(), self.__provide_quarter_UPC(), self.__provide_breast_UPC(),
+                        self.__provide_portion_UPC(), self.__provide_wing_UPC(), self.__provide_liver_UPC(),
+                        self.__provide_gizzard_UPC(), self.__provide_heart_UPC()])
+        df = df.rename('UPC')
 
         return df
 
+
+    def __provide_carcass_costs_markup(self):
+
+        slaughter_speed = ProductionParameters().slaughter_speed
+        avg_lifestock_monthly = ProductionParameters().avg_monthly_lifestock
+        carcass_yeld = self.yelds[self.yelds['TOWAR'] == 'Tuszka']['Yield']
+
+        # Slaughter markup
+        slaughter_costs = self.costs_dataframe.slaughter
+        slaughter_costs_markup = (slaughter_costs.total - slaughter_costs.labour) / (avg_lifestock_monthly * carcass_yeld)
+
+        # Invoicing markup
+        invoicing_costs = self.costs_dataframe.invoicing
+        invoicing_costs_markup = (invoicing_costs.total - invoicing_costs.labour) / (avg_lifestock_monthly * carcass_yeld)
+
+        # Washing markup
+        washing_costs = self.costs_dataframe.washing
+        washing_costs_markup = (washing_costs.total - washing_costs.labour) / (
+                    avg_lifestock_monthly * carcass_yeld)
+
+        # Workshop markup
+        workshop_costs = self.costs_dataframe.workshop
+        workshop_costs_markup = (workshop_costs.total - workshop_costs.labour) / (
+                avg_lifestock_monthly * carcass_yeld)
+
+        # Administration markup
+        administration_costs = self.costs_dataframe.administration
+        administration_costs_markup = (administration_costs.total - administration_costs.labour) / (
+                avg_lifestock_monthly * carcass_yeld)
+
+        # General costs markup
+        general_costs = self.costs_dataframe.general_costs
+        general_costs_markup = (general_costs.total - general_costs.labour) / (
+                avg_lifestock_monthly * carcass_yeld)
+
+        result = general_costs_markup + administration_costs_markup + washing_costs_markup + invoicing_costs_markup + slaughter_costs_markup
+
+        return result
+
+
+
+
     def __provide_carcass_UPC(self):
         carcass = Carcass()
-        labour_markup = carcass.labour_markup
+        upc = carcass.labour_markup + self.__provide_carcass_costs_markup()
 
-        # Here we calculate other costs for carcass
-
-        return UPC
+        return upc
 
     def __provide_carcass_sale_UPC(self):
         """
@@ -29,46 +86,58 @@ class UnitProductionCostsCalculator():
         :return: Carcass_sale_upc
         """
 
-        return UPC
+        carcass_sale = Carcass_sale()
+        upc = carcass_sale.labour_markup + self.__provide_carcass_costs_markup()
+
+        return upc
 
     def __provide_gizzard_UPC(self):
-        gizzard = Gizzards()
 
-        return UPC
+        gizzard = Gizzard()
+        upc = gizzard.labour_markup
+
+        return upc
 
     def __provide_liver_UPC(self):
+
         liver = Liver()
+        upc = liver.labour_markup
 
-
-        return UPC
+        return upc
 
     def __provide_heart_UPC(self):
+
         heart = Heart()
+        upc = heart.labour_markup
 
-
-        return UPC
+        return upc
 
     def __provide_breast_UPC(self):
+
         breast = Breast()
+        # .iat[0] accesses the value from Series
+        upc = self.__provide_carcass_costs_markup().iat[0]/3 + breast.labour_markup
 
-
-        return UPC
+        return upc
 
     def __provide_wing_UPC(self):
         wing = Wing()
+        upc = self.__provide_carcass_costs_markup().iat[0]/3 + wing.labour_markup
 
-        return UPC
+        return upc
 
     def __provide_quarter_UPC(self):
         quarter = Quarter()
+        upc = self.__provide_carcass_costs_markup().iat[0]/3 + quarter.labour_markup
 
-        return UPC
+        return upc
 
     def __provide_portion_UPC(self):
         portion = Portion()
+        upc = portion.labour_markup
+
+        return upc
 
 
-        return UPC
-
-
-
+d = UnitProductionCostsCalculator().calculate()
+print(d)

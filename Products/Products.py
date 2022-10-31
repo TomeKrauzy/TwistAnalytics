@@ -13,6 +13,8 @@ class ProductionParameters():
     # breast line speed, cone/hour
     breast_speed = 2520
 
+    # avg monthly lifestock quantity
+    avg_monthly_lifestock = 2000000
 
 # Tuszka
 class Carcass(ProductionParameters):

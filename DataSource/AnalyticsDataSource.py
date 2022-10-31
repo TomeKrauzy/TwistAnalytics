@@ -36,10 +36,16 @@ class AnalyticsDataSource:
         costs_df.columns.values[1] = "KATEGORIA"
         costs_df.columns.values[
             4] = "WINIEN_MSC"  # co jeśli wezme za okres 2msc, czy ta kolumna będzie przestawiała te 2 msc?
-        costs_df.columns.values[8] = "WINIEN_NARASTAJĄCO"
-        costs_df = costs_df.iloc[:, [0, 1, 4, 8]]
+        costs_df.columns.values[6] = "WINIEN_NARASTAJĄCO"
+        costs_df[['WINIEN_MSC', 'WINIEN_NARASTAJĄCO']] = costs_df[['WINIEN_MSC', 'WINIEN_NARASTAJĄCO']].apply(
+            lambda x: x.str.replace(' ', ''))
+
+        costs_df[['WINIEN_MSC']] = costs_df[['WINIEN_MSC']].astype(float)
+        costs_df = costs_df.iloc[:, [0, 1, 4, 6]]
         zmiana = {'£': 'ł', '¯': 'ż'}
         costs_df = costs_df.replace(zmiana, regex=True)
+
+
 
         return costs_df
 
@@ -75,3 +81,4 @@ class AnalyticsDataSource:
         products_yield_dataframe['TOWAR'] = products_yield_dataframe.index.map(products_names)
 
         return products_yield_dataframe
+

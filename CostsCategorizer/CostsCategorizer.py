@@ -42,7 +42,7 @@ class CostsCategorizer():
 
         df = self.cost_dataframe.iloc[starting_index:stoping_index, ]
         total_costs = df.iloc[0, 2]
-        labour_costs = df[df['KATEGORIA'] == 'KOSZTY PRACY'].iloc[:, 2]
+        labour_costs = df[df['KATEGORIA'] == 'KOSZTY PRACY'].iloc[0, 2]
 
         confectionery = CostsUnitContainer('Rozbiór', total=total_costs, labour=labour_costs)
         return confectionery
@@ -54,7 +54,7 @@ class CostsCategorizer():
 
         df = self.cost_dataframe.iloc[starting_index:stoping_index, ]
         total_costs = df.iloc[0, 2]
-        labour_costs = df[df['KATEGORIA'] == 'KOSZTY PRACY'].iloc[:, 2]
+        labour_costs = df[df['KATEGORIA'] == 'KOSZTY PRACY'].iloc[0, 2]
         washing = CostsUnitContainer('Rozbiór', total=total_costs, labour=labour_costs)
 
         return washing
@@ -66,7 +66,7 @@ class CostsCategorizer():
 
         df = self.cost_dataframe.iloc[starting_index:stoping_index, ]
         total_costs = df.iloc[0, 2]
-        labour_costs = df[df['KATEGORIA'] == 'KOSZTY PRACY'].iloc[:, 2]
+        labour_costs = df[df['KATEGORIA'] == 'KOSZTY PRACY'].iloc[0, 2]
 
         workshop = CostsUnitContainer('Warsztat', total=total_costs, labour=labour_costs)
 
@@ -85,7 +85,7 @@ class CostsCategorizer():
 
         df = self.cost_dataframe.iloc[starting_index:stoping_index, ]
         total_costs = df.iloc[0, 2]
-        labour_costs = df[df['KATEGORIA'] == 'KOSZTY PRACY'].iloc[:, 2]
+        labour_costs = df[df['KATEGORIA'] == 'KOSZTY PRACY'].iloc[0, 2]
         invoicing = CostsUnitContainer('Fakturowanie', total = total_costs, labour = labour_costs)
 
         return invoicing
@@ -97,7 +97,7 @@ class CostsCategorizer():
 
         df = self.cost_dataframe.iloc[starting_index:stoping_index, ]
         total_costs = df.iloc[0, 2]
-        labour_costs = df[df['KATEGORIA'] == 'KOSZTY PRACY'].iloc[:, 2]
+        labour_costs = df[df['KATEGORIA'] == 'KOSZTY PRACY'].iloc[0, 2]
         administration = CostsUnitContainer('Administracja', total = total_costs, labour = labour_costs)
 
         return administration
@@ -121,7 +121,7 @@ class CostsCategorizer():
 
         df = self.cost_dataframe.iloc[starting_index:stoping_index, ]
         total_costs = df.iloc[0, 2]
-        labour_costs = df[df['KATEGORIA'] == 'KOSZTY PRACY'].iloc[:, 2]
+        labour_costs = df[df['KATEGORIA'] == 'KOSZTY PRACY'].iloc[0, 2]
         general_costs = CostsUnitContainer('Koszty ogólne', total=total_costs, labour=labour_costs)
 
         return general_costs
