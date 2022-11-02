@@ -34,7 +34,7 @@ from LifestockPurchusePriceSplit.LifesockPurchusePriceSplitter import LifestockP
 
 lifestock_purchuse_price_splitter = LifestockPurchusePriceSplitter(dataframe_container.production, average_generator.generate(AverageSalesPricesReportScope.WHOLESALE), dataframe_container.products_yield, avg_lifestock_price)
 
-print(lifestock_purchuse_price_splitter.split_lifestock_purchuse_price().columns)
+
 
 
 from CostsCategorizer.CostsCategorizer import CostsCategorizer
@@ -42,8 +42,7 @@ costs_categorizer = CostsCategorizer(dataframe_container.costs)
 
 costs_container = costs_categorizer.provide_data()
 
-print(lifestock_purchuse_price_splitter.quarter_purchuse_price_splitter())
+print(lifestock_purchuse_price_splitter.all_products_purchuse_price_splitted())
 
-print(lifestock_purchuse_price_splitter.split_lifestock_purchuse_price())
 
 
