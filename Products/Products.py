@@ -1,5 +1,5 @@
 from DataSource.AnalyticsDataSource import AnalyticsDataSource
-
+import pandas as pd
 
 class ProductionParameters():
     products_yelds = AnalyticsDataSource().provide().products_yield
@@ -12,6 +12,9 @@ class ProductionParameters():
     slaughter_speed = 3720
     # breast line speed, cone/hour
     breast_speed = 2520
+    # deboning_efficiency kg/h
+    tigh_deboning_efficiency = 32
+    leg_deboning_efficiency = 32
 
     # avg monthly lifestock quantity
     avg_monthly_lifestock = 2000000
@@ -237,3 +240,81 @@ class Portion(ProductionParameters):
         labour_costs_markup += Carcass().labour_markup.values[0] / 3
 
         return labour_costs_markup
+
+#------------------------------------- Elements from Quarter ------------------------------------------------------
+class Leg(ProductionParameters):
+    def __init__(self):
+        super().__init__()
+        # How much people are involved in production process
+        self.labour = 1
+        self.labour_markup = self.__provide_labour_markup()
+
+    def __provide_labour_markup(self):
+        yeld = self.products_yelds[self.products_yelds['TOWAR'] == 'Noga']['Yield']
+
+        production_in_kg_per_hour = self.confectionery_speed * self.avg_lifestock_weight * yeld
+        labour_costs_per_hour = self.labour * self.labor_hour_cost
+        labour_costs_markup = labour_costs_per_hour / production_in_kg_per_hour
+        return labour_costs_markup
+
+class Tigh(ProductionParameters):
+    def __init__(self):
+        super().__init__()
+        # How much people are involved in production process
+        self.labour = 1
+        self.labour_markup = self.__provide_labour_markup()
+
+    def __provide_labour_markup(self):
+        yeld = self.products_yelds[self.products_yelds['TOWAR'] == 'Udziec']['Yield']
+
+        production_in_kg_per_hour = self.confectionery_speed * self.avg_lifestock_weight * yeld
+        labour_costs_per_hour = self.labour * self.labor_hour_cost
+        labour_costs_markup = labour_costs_per_hour / production_in_kg_per_hour
+        labour_costs_markup = pd.Series(labour_costs_markup, index=[248])
+        return labour_costs_markup
+
+class Shank(ProductionParameters):
+    def __init__(self):
+        super().__init__()
+        # How much people are involved in production process
+        self.labour = 1
+        self.labour_markup = self.__provide_labour_markup()
+
+    def __provide_labour_markup(self):
+        yeld = self.products_yelds[self.products_yelds['TOWAR'] == 'Podudzie']['Yield']
+
+        production_in_kg_per_hour = self.confectionery_speed * self.avg_lifestock_weight * yeld
+        labour_costs_per_hour = self.labour * self.labor_hour_cost
+        labour_costs_markup = labour_costs_per_hour / production_in_kg_per_hour
+        labour_costs_markup = pd.Series(labour_costs_markup, index=[240])
+        return labour_costs_markup
+
+class Leg_deboned(ProductionParameters):
+    def __init__(self):
+        super().__init__()
+        # How much people are involved in production process
+        self.labour = 8
+        self.labour_markup = self.__provide_labour_markup()
+
+    def __provide_labour_markup(self):
+        production_in_kg_per_hour = self.leg_deboning_efficiency * self.labour
+        labour_costs_per_hour = self.labour * self.labor_hour_cost
+        labour_costs_markup = labour_costs_per_hour / production_in_kg_per_hour
+        labour_costs_markup = pd.Series(labour_costs_markup, index=[12013])
+        return labour_costs_markup
+
+class Tigh_deboned(ProductionParameters):
+    def __init__(self):
+        super().__init__()
+        # How much people are involved in production process
+        self.labour = 8
+        self.labour_markup = self.__provide_labour_markup()
+
+    def __provide_labour_markup(self):
+        production_in_kg_per_hour = self.tigh_deboning_efficiency * self.labour
+        labour_costs_per_hour = self.labour * self.labor_hour_cost
+        labour_costs_markup = labour_costs_per_hour / production_in_kg_per_hour
+        labour_costs_markup = pd.Series(labour_costs_markup, index=[9859])
+
+        return labour_costs_markup
+

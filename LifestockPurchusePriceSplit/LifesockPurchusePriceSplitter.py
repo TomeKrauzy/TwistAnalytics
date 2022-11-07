@@ -61,20 +61,21 @@ class LifestockPurchusePriceSplitter():
         quarter_yield = self.products_yield.filter(items = [7437], axis=0)['Yield'].iat[0]
 
         # We split quarter_purchase price for leg and back with proportion 0.9 and 0.1
-        noga_purchase_price = quarter_purchase_price * 0.9 / (quarter_yield * 0.71)
-        grzbiet_purchuse_price = quarter_purchase_price * 0.1 / (quarter_yield * 0.2874)
+        leg_purchase_price = quarter_purchase_price * 0.9 / (quarter_yield * 0.71)
+        back_purchuse_price = quarter_purchase_price * 0.1 / (quarter_yield * 0.2874)
 
         # Further purchase_price_split according to assumed weight: thigh-0.52, shank-0.48
         tigh_purchase_price = (quarter_purchase_price * 0.9 * 0.52) / (quarter_yield * 0.71 * 0.48)
         shank_purchase_price = quarter_purchase_price * 0.9 * 0.48 / (quarter_yield * 0.71 * 0.513)
 
         # purchase_price_split for deboned products, according to: material_cost / product_weigh.
-        noga_t = quarter_purchase_price * 0.9 / (quarter_yield * 0.71 * 0.6825)
-        udo_t = (quarter_purchase_price * 0.9 * 0.52) / (quarter_yield * 0.71 * 0.48 * 0.7357)
+        leg_t = quarter_purchase_price * 0.9 / (quarter_yield * 0.71 * 0.6825)
+        tigh_t = (quarter_purchase_price * 0.9 * 0.52) / (quarter_yield * 0.71 * 0.48 * 0.7357)
+
 
         #  creates dicts with results
-        quarter_split = {'Noga': noga_purchase_price, 'Grzbiet': grzbiet_purchuse_price, 'Udziec': tigh_purchase_price,
-                      'Podudzie': shank_purchase_price, 'Noga T.': noga_t, 'Udziec T.': udo_t}
+        quarter_split = {'Noga': leg_purchase_price, 'Grzbiet': back_purchuse_price, 'Udziec': tigh_purchase_price,
+                      'Podudzie': shank_purchase_price, 'Noga T.': leg_t, 'Udziec T.': tigh_t}
 
         products = [60, 1714, 248, 240, 12013, 9859]
         products_yield = self.products_yield

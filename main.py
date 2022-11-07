@@ -44,5 +44,18 @@ costs_container = costs_categorizer.provide_data()
 
 print(lifestock_purchuse_price_splitter.all_products_purchuse_price_splitted())
 
+# print(dataframe_container.products_yield)
 
 
+from Reports.TreysDepartment.TreysDepartment import *
+import pandas as pd
+pd.set_option('display.max_columns', 7)
+
+from UnitProductionCostsCalculator.UnitProductionCostsCalculator import UnitProductionCostsCalculator
+
+tkw_df = UnitProductionCostsCalculator().calculate()
+
+print(tkw_df)
+
+treys = TreysDepartment(dataframe_container.sales)
+print(treys.generate_raport())

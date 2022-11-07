@@ -27,14 +27,15 @@ class UnitProductionCostsCalculator():
         """
         df = pd.concat([self.__provide_carcass_UPC(), self.__provide_quarter_UPC(), self.__provide_breast_UPC(),
                         self.__provide_portion_UPC(), self.__provide_wing_UPC(), self.__provide_liver_UPC(),
-                        self.__provide_gizzard_UPC(), self.__provide_heart_UPC()])
+                        self.__provide_gizzard_UPC(), self.__provide_heart_UPC(), self.__provide_leg_UPC(),
+                        self.__provide_tigh_UPC(), self.__provide_shank_UPC(), self.__provide_leg_deboned_UPC(),
+                        self.__provide_tigh_deboned_UPC()])
         df = df.rename('UPC')
 
         return df
 
 
     def __provide_carcass_costs_markup(self):
-
         slaughter_speed = ProductionParameters().slaughter_speed
         avg_lifestock_monthly = ProductionParameters().avg_monthly_lifestock
         carcass_yeld = self.yelds[self.yelds['TOWAR'] == 'Tuszka']['Yield']
@@ -85,35 +86,30 @@ class UnitProductionCostsCalculator():
         Here we add costs of selling the carcass as a whole
         :return: Carcass_sale_upc
         """
-
         carcass_sale = Carcass_sale()
         upc = carcass_sale.labour_markup + self.__provide_carcass_costs_markup()
 
         return upc
 
     def __provide_gizzard_UPC(self):
-
         gizzard = Gizzard()
         upc = gizzard.labour_markup
 
         return upc
 
     def __provide_liver_UPC(self):
-
         liver = Liver()
         upc = liver.labour_markup
 
         return upc
 
     def __provide_heart_UPC(self):
-
         heart = Heart()
         upc = heart.labour_markup
 
         return upc
 
     def __provide_breast_UPC(self):
-
         breast = Breast()
         # .iat[0] accesses the value from Series
         upc = self.__provide_carcass_costs_markup().iat[0]/3 + breast.labour_markup
@@ -137,6 +133,36 @@ class UnitProductionCostsCalculator():
         upc = portion.labour_markup
 
         return upc
+
+# ------------------------------------- Elements from Quarter ------------------------------------------------------
+    def __provide_leg_UPC(self):
+        leg = Leg()
+        upc = leg.labour_markup
+
+        return upc
+    def __provide_tigh_UPC(self):
+        tigh = Tigh()
+        upc = tigh.labour_markup
+
+        return upc
+    def __provide_shank_UPC(self):
+        shank = Shank()
+        upc = shank.labour_markup
+
+        return upc
+
+    def __provide_leg_deboned_UPC(self):
+        leg_deboned = Leg_deboned()
+        upc = leg_deboned.labour_markup
+
+        return upc
+
+    def __provide_tigh_deboned_UPC(self):
+        tig_deboned = Tigh_deboned()
+        upc = tig_deboned.labour_markup
+
+        return upc
+
 
 
 d = UnitProductionCostsCalculator().calculate()
