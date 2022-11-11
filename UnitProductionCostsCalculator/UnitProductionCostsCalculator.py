@@ -162,8 +162,3 @@ class UnitProductionCostsCalculator():
         upc = tig_deboned.labour_markup
 
         return upc
-
-
-
-d = UnitProductionCostsCalculator().calculate()
-print(d)

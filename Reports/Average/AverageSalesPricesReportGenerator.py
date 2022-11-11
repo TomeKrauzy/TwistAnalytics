@@ -25,6 +25,7 @@ class AverageSalesPricesReportGenerator():
         wholesale['ŚR_CENA'] = wholesale['WARTOSC'] / wholesale['ILOSC']
         wholesale = wholesale.sort_values('ŚR_CENA', ascending=False)[['ILOSC', 'ŚR_CENA']]
 
+
         return wholesale
 
     def __create_all_report(self):

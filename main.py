@@ -53,9 +53,14 @@ pd.set_option('display.max_columns', 7)
 
 from UnitProductionCostsCalculator.UnitProductionCostsCalculator import UnitProductionCostsCalculator
 
+
 tkw_df = UnitProductionCostsCalculator().calculate()
 
-print(tkw_df)
 
-treys = TreysDepartment(dataframe_container.sales)
-print(treys.generate_raport())
+
+treys = TreysDepartment(dataframe_container.sales, wholesale_report)
+
+treys_raport = treys.generate_raport()
+
+treys_raport.to_excel("raport_tacki_Październik.xlsx",
+          sheet_name='Krauzy_Tomasz')

@@ -20,7 +20,7 @@ class AnalyticsDataSource:
         return container
 
     def __provide_sales_dataframe(self):
-        sales_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/Pandas/TWIST/08.CSV', encoding='latin1', sep=';')
+        sales_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/10.CSV', encoding='latin1', sep=';')
         sales_df[['ILOSC', 'WARTOSC', 'SR_CENA']] = sales_df[['ILOSC', 'WARTOSC', 'SR_CENA']].apply(
             lambda x: x.str.replace(',', '.'))
         sales_df[['ILOSC', 'WARTOSC', 'SR_CENA']] = sales_df[['ILOSC', 'WARTOSC', 'SR_CENA']].astype(float)
@@ -50,14 +50,14 @@ class AnalyticsDataSource:
         return costs_df
 
     def __provide_lifestock_dataframe(self):
-        lifestock_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/żywiec.CSV', encoding='latin1', sep=';')
+        lifestock_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/żywiec1.CSV', encoding='latin1', sep=';')
         lifestock_df[['WARTOSC']] = lifestock_df[['WARTOSC']].apply(
             lambda x: x.str.replace(',', '.'))
         lifestock_df[['ILOSC', 'WARTOSC']] = lifestock_df[['ILOSC', 'WARTOSC']].astype(float)
         return lifestock_df
 
     def __provide_production_dataframe(self):
-        sales_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/Pandas/TWIST/08.CSV', encoding='latin1', sep=';')
+        sales_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/10.CSV', encoding='latin1', sep=';')
         return sales_df
 
     def __provide_products_name(self):
