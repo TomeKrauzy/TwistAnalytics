@@ -3,8 +3,7 @@ from GlobalParameters.ProductionParameters import ProductionParameters
 
 
 class Carcass(ProductionParameters):
-    """
-    Class for Carcass used for further confection
+    """Class for Carcass used for further confection
     """
 
     def __init__(self):
