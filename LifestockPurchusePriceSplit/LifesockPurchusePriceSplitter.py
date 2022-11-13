@@ -38,29 +38,35 @@ class LifestockPurchasePriceSplitter():
         df['zysk ze sprzedaży kg żywca[zł]'] = df['ŚR_CENA'] * df['Yield']
 
         # Here we calculate 'weights' for each elements that we will use to split lifestock price accordingly
-        # Important: We can sell products in 2 options: carcass and elements. Each scenario has different total_revenue from selling original products from lifestock
+        # Important: We can sell products in 2 options: carcass and elements. Each scenario has different total_revenue
+        # from selling original products from lifestock
 
         # Elements
         total_revenue_from_products_of_1kg_lifestock = df['zysk ze sprzedaży kg żywca[zł]'].iloc[1:].sum()
         revenue_from_products_of_1kg_lifestock = df['zysk ze sprzedaży kg żywca[zł]']
 
-        df[
-            '% udział_w_zysku_ze_sprzedaży'] = revenue_from_products_of_1kg_lifestock / total_revenue_from_products_of_1kg_lifestock
-        df['Wielkość ceny zakupu [% udział w zysku * cena zakupu]'] = df[
-                                                                          '% udział_w_zysku_ze_sprzedaży'] * self.avg_lifestock_price
+        df['% udział_w_zysku_ze_sprzedaży'] = revenue_from_products_of_1kg_lifestock\
+                                              / total_revenue_from_products_of_1kg_lifestock
+        df['Wielkość ceny zakupu [% udział w zysku * cena zakupu]'] = df['% udział_w_zysku_ze_sprzedaży']\
+                                                                      * self.avg_lifestock_price
 
         # Carcass scenario
-        # We calculate carcass_acqusition_price = lifestock_price - liver_acqusition_price - heart_acqusition_price - gizard_acqusition_price_
+        # We calculate carcass_acquisition_price =
+        #                                         lifestock_price - liver_acqusition_price -
+        #                                         heart_acquisition_price - gizzard_acquisition_price
         lifestock_price = self.avg_lifestock_price
-        liver_acqusition_price = df.loc[df.index == 'Wątroba', 'zysk ze sprzedaży kg żywca[zł]'].item()
-        heart_acqusition_price = df.loc[df.index == 'Serce', 'zysk ze sprzedaży kg żywca[zł]'].item()
-        gizzard_acqusition_price = df.loc[df.index == 'Żołądek', 'zysk ze sprzedaży kg żywca[zł]'].item()
+        liver_acquisition_price = df.loc[df.index == 'Wątroba', 'zysk ze sprzedaży kg żywca[zł]'].item()
+        heart_acquisition_price = df.loc[df.index == 'Serce', 'zysk ze sprzedaży kg żywca[zł]'].item()
+        gizzard_acquisition_price = df.loc[df.index == 'Żołądek', 'zysk ze sprzedaży kg żywca[zł]'].item()
         df.loc[
-            df.index == 'Tuszka', 'Wielkość ceny zakupu [% udział w zysku * cena zakupu]'] = lifestock_price - liver_acqusition_price - heart_acqusition_price - gizzard_acqusition_price
+            df.index == 'Tuszka', 'Wielkość ceny zakupu [% udział w zysku * cena zakupu]'] = lifestock_price\
+                                                                                             - liver_acquisition_price\
+                                                                                             - heart_acquisition_price \
+                                                                                             - gizzard_acquisition_price
 
         # Here we calculate final zł/kg for every product
-        df['koszt_pozyskania_towaru [zł/kg]'] = df['Wielkość ceny zakupu [% udział w zysku * cena zakupu]'] / df[
-            'Yield']
+        df['koszt_pozyskania_towaru [zł/kg]'] = df['Wielkość ceny zakupu [% udział w zysku * cena zakupu]'] \
+                                                / df['Yield']
 
         return df
 
