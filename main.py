@@ -47,7 +47,7 @@ print(lifestock_purchuse_price_splitter.provide_acquisition_cost_all_products())
 # print(dataframe_container.products_yield)
 
 
-from Reports.TreysDepartment.TreysDepartment import *
+from TreysDepartment.TreysDepartment import *
 import pandas as pd
 pd.set_option('display.max_columns', 7)
 

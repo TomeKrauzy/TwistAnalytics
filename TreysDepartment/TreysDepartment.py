@@ -1,90 +1,10 @@
 import pandas as pd
 import json
 import numpy as np
-from UnitProductionCostsCalculator.UnitProductionCostsCalculator import UnitProductionCostsCalculator
+from TreysDepartment.TreysParameters import TreysParameters
+from GlobalParameters.ClassificationData import ClassificationData
 
 pd.set_option('display.float_format', lambda x: '%.3f' % x)
-
-
-class TreysParameters():
-    """
-    This class represents standard parameters used in departament
-    """
-
-    def __init__(self):
-        self.upc_all_products = self.__provide_upc_all_products()
-
-    primary_products = [260, 7437, 63, 156, 61, 185, 183, 74]
-
-    product_map = {63: [1795, 13887, 13888],  # filet
-                   7437: [10, 13885, 13886],  # ćwiartka
-                   260: [13884],  # tuszka
-                   248: [202, 13891, 13892],  # udziec
-                   240: [356, 13893, 13894],  # podudzie
-                   9859: [271],  # udziec T
-                   12013: [14341],  # noga T
-                   60: [674, 13889, 13890],  # noga
-                   61: [418, 13895, 13896],  # skrzydła
-                   156: [13897],  # porcja
-                   74: [],  # serce
-                   183: [],  # żołądek
-                   }
-
-    big_tray = ['Tuszka Tacka', 'Filet Tacka Duża', "Noga Tacka Duża", "Podudzie Tacka Duża", "Porcja Tacka Duża",
-                'Skrzydło Tacka Duża', 'Udziec Tacka Duża', 'Ćwiartka Tacka Duża']
-    small_tray = ['Filet Tacka Mała', 'Noga Tacka Mała', 'Podudzie Tacka Mała', 'Skrzydło Tacka Mała',
-                  'Udziec Tacka Mała', 'Ćwiartka Tacka Mała']
-    vac_small = ['Noga T. Vac', 'Noga Vac', 'Podudzie Vac', 'Udziec T. Vac', 'Ćwiartka Vac', 'Skrzydło Vac']
-    vac_big = ['Filet Vac']
-
-    trays_products = [10, 202, 271, 356, 418, 674, 1795, 13884, 13885, 13887, 13888, 13889, 13891, 13893, 13895, 14341,
-                      13886, 13890, 13892, 13894, 13896, 13897]
-
-    material_parameters = {'Tacka Duża': {'Koszt': 0.38, 'Ładowność': 1.2},
-                           'Tacka Mała': {'Koszt': 0.20, 'Ładowność': 0.7},
-                           'Tuszka Tacka': {'Koszt': 0.25, 'Ładowność': 2}, 'Absorber': {'Koszt': 0.13},
-                           'Vac Duży': {'Koszt': 0.66, 'Ładowność': 5},
-                           'Vac Mały': {'Koszt': 0.40, 'Ładowność': 2.75}, 'Etykieta': {'Koszt': 0.06},
-                           'Karton Duży': {'Koszt': 2.93, 'Ładowność': {'Tacka': 6, 'Vac': 10}},
-                           'Karton Mały': {'Koszt': 1.95}}
-
-    # Information about what products are packed in which quantity regarding speific client
-    selgros = {'Pakowanie': {8: [63, 185, 260, 7437, 9859, 156, 1580, 1714, 183, 60, 61, 74, 2131, 12013, 240, 248],
-                             6: [13888, 13886, 13890, 13892, 13894, 13896, 13885, 13889, 13891, 13893, 13895, 13897],
-                             10: [10, 202, 271, 356, 418, 674, 1795, 14341, 13884, 13887]
-                             },
-               'Karton': {'Maly': [63, 7437],
-                          'Duzy': [10, 202, 271, 356, 418, 674, 1795, 14341, 13888, 13886, 13890, 13892, 13894, 13896,
-                                   13885, 13887, 13889, 13891, 13893, 13895, 13897, 10, 185, 202, 260, 271, 356, 418,
-                                   674, 1795, 9859, 14341, 156, 1580, 1714, 183, 60, 61, 74, 2131, 12013, 240, 248]
-                          }
-               }
-
-    leclerk = {
-        'Pakowanie': {8: [13885, 13887, 13889, 13891, 13893, 13895, 13897, 13888, 13886, 13890, 13892, 13894, 13896],
-                      10: [10, 202, 271, 356, 418, 674, 1795, 14341, 10, 63, 185, 202, 260, 271, 356, 418, 674, 1795,
-                           7437, 9859, 14341, 156, 1580, 1714, 183, 60, 61, 74, 2131, 12013, 240, 248],
-                      5: [74, 183]
-                      },
-        'Karton': {'Maly': [63],
-                   'Duzy': [7437, 10, 202, 271, 356, 418, 674, 1795, 14341, 13888, 13886, 13890, 13892, 13894, 13896,
-                            13885, 13887, 13889, 13891, 13893, 13895, 13897, 10, 185, 202, 260, 271, 356, 418, 674,
-                            1795, 9859, 14341, 156, 1580, 1714, 183, 60, 61, 74, 2131, 12013, 240, 248]}
-    }
-
-    def __provide_upc_all_products(self):
-        """
-        We add upc for treys products which is the same as for base products
-        :return:
-        """
-        upc = UnitProductionCostsCalculator().provide_primary_products_UPC()
-
-        trays_upc = {}
-        for base_product_index, trays_product in self.product_map.items():
-            for product in trays_product:
-                trays_upc[product] = upc.loc[base_product_index]
-        df = pd.concat([pd.Series(trays_upc), upc])
-        return df
 
 
 class TreysDepartment(TreysParameters):
@@ -98,13 +18,14 @@ class TreysDepartment(TreysParameters):
         self.__provide_materials_lables()
         self.__calculate_packages_boxes()
         self.__map_costs_of_production()
-        self.product_names = self.__provide_products_name()
+        self.product_names = ClassificationData.products_labels
 
     def generate_raport(self):
+        """ Generates report for trays departament
+
+        :return: DataFrame with columns: ['ILOSC', 'KOSZT_OPAKOWAN_ALL', 'SR_CENA', 'ŚR_CENA_HURT', 'ZYSK', 'WYNIK']
         """
-        chcemy tutaj wyświetlić ramke z wynikiem na elementach, czyli ile zysku mamy na każdej pozycji
-        :return:
-        """
+
         sr_cena_filet_vac_slowacja = 4.4 * 4.0
         # Updatujemy śr cene dla TWIST SK
         self.trays_sales['SR_CENA'] = np.where(
@@ -121,7 +42,7 @@ class TreysDepartment(TreysParameters):
         summary_df = self.trays_sales.groupby('TOWAR').sum()
 
         # dodajemy_index
-        d_swap = {v: k for k, v in self.__provide_products_name().items()}
+        d_swap = {v: k for k, v in self.product_names.items()}
         self.avg_wholesale_prices['INDEX_TOW'] = self.avg_wholesale_prices.index.map(d_swap)
         summary_df['INDEX_TOW'] = summary_df.index.map(d_swap)
 
@@ -155,12 +76,6 @@ class TreysDepartment(TreysParameters):
 
         output_df = summary_df[['ILOSC', 'KOSZT_OPAKOWAN_ALL', 'SR_CENA', 'ŚR_CENA_HURT', 'ZYSK', 'WYNIK']]
 
-        x = self.__provide_products_name()
-        d = self.upc_all_products
-
-        d['NAZWA'] = d.index.map(x)
-        print(d)
-
         return output_df
 
     def __provide_materials_lables(self):
@@ -185,8 +100,8 @@ class TreysDepartment(TreysParameters):
         self.trays_sales['OPAKOWANIE'] = package
 
     def __calculate_packages_boxes(self):
-        """
-        This method provides and calculates all data like: quantity of packages used, their price etc.
+        """Provides and calculates all data like: quantity of packages used, their price etc.
+
         :return:
         """
 
@@ -290,10 +205,3 @@ class TreysDepartment(TreysParameters):
         self.trays_sales['PRODUCT_COST'] = self.trays_sales['INDEX_TOW'].map(self.upc_all_products) * self.trays_sales[
             'ILOSC']
 
-    def __provide_products_name(self):
-        with open('/Users/tomaszkrauzy/Desktop/Pandas/towary.txt') as f:
-            products_names = {int(k): v for k, v in json.load(f).items()}
-
-        return products_names
-
-# Trzeba doliczyć koszty pracy tego działu

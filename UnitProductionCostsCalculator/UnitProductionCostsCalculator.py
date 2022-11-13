@@ -2,11 +2,12 @@ from Products.Products import *
 import pandas as pd
 from CostsCategorizer.CostsCategorizer import CostsCategorizer
 from DataSource.AnalyticsDataSource import AnalyticsDataSource
+from GlobalParameters.ClassificationData import ClassificationData
 
 class UnitProductionCostsCalculator():
 
     """
-    This class combines labour_markup and costs markup.
+    A class to combine labour_markup and costs markup.
 
     External function: calculate() returns DataFrame with UnitProductionCost for all base elements
 
@@ -22,9 +23,11 @@ class UnitProductionCostsCalculator():
         self.yelds = ProductionParameters().PRODUCTS_YIELDS
 
     def provide_primary_products_UPC(self):
-        """
+        """Returns dataframe with upc for primary products
+
         :return: pd.Series with product id as index and UPC as value
         """
+
         df = pd.concat([self.__provide_carcass_UPC(), self.__provide_quarter_UPC(), self.__provide_breast_UPC(),
                         self.__provide_portion_UPC(), self.__provide_wing_UPC(), self.__provide_liver_UPC(),
                         self.__provide_gizzard_UPC(), self.__provide_heart_UPC(), self.__provide_leg_UPC(),
@@ -35,10 +38,13 @@ class UnitProductionCostsCalculator():
         return df
 
     def provide_treys_products_UPC(self):
-        primary_products_upc_df = self.provide_primary_products_UPC()
-        trays_upc = {}
+        """Returns dataframe with upc for treys products
 
-        for base_product_index, trays_product in self.product_map.items():
+        :return: pd.Series with product id as index and UPC as value
+        """
+
+        trays_upc = {}
+        for base_product_index, trays_product in ClassificationData.products_labels.items():
             for product in trays_product:
                 trays_upc[product] = upc.loc[base_product_index]
         df = pd.concat([pd.Series(trays_upc), upc])
