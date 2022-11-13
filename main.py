@@ -10,7 +10,7 @@ from Reports.Average.AverageLifestockPriceGenerator import AverageLifestockPrice
 # tworze instancje analyticsDataSource i wywołuje metode provide, która dostarcza
 # dataframe_container(zawiera wszystkie potrzebne do obliczeń dataframy)
 analytics_data_source = DataSource.AnalyticsDataSource()
-dataframe_container = analytics_data_source.provide()
+dataframe_container = analytics_data_source.provide_data()
 
 # tworze instancje AverageSalesPricesReportGenerator, zeby móc odwoływać się do metody
 # generate, gdzie wybieram zakres raportu
@@ -54,7 +54,7 @@ pd.set_option('display.max_columns', 7)
 from UnitProductionCostsCalculator.UnitProductionCostsCalculator import UnitProductionCostsCalculator
 
 
-tkw_df = UnitProductionCostsCalculator().calculate()
+tkw_df = UnitProductionCostsCalculator().provide_primary_products_UPC()
 
 
 
@@ -64,3 +64,10 @@ treys_raport = treys.generate_raport()
 
 treys_raport.to_excel("raport_tacki_Październik.xlsx",
           sheet_name='Krauzy_Tomasz')
+
+
+
+
+d = UnitProductionCostsCalculator().provide_primary_products_UPC()
+
+print(d)

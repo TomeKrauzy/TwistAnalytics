@@ -1,13 +1,16 @@
 import json
-
 import pandas as pd
-
 from DataSource.DataFrameContainer import DataFrameContainer
 
 
 class AnalyticsDataSource:
+    def provide_data(self):
+        """Gets all data and returns it in DataFrameContainer
 
-    def provide(self):
+        :return: DataFrameContainer with dataframes for: sales, production, costs, lifestock, products, stores,
+        products_yield
+        """
+
         container = DataFrameContainer(
             sales=self.__provide_sales_dataframe(),
             production=self.__provide_production_dataframe(),
@@ -20,17 +23,29 @@ class AnalyticsDataSource:
         return container
 
     def __provide_sales_dataframe(self):
+        """Gets sale data from file and returns pandas dataframe
+
+        :return: dataframe with firm sales data
+        """
+
         sales_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/10.CSV', encoding='latin1', sep=';')
+
         sales_df[['ILOSC', 'WARTOSC', 'SR_CENA']] = sales_df[['ILOSC', 'WARTOSC', 'SR_CENA']].apply(
             lambda x: x.str.replace(',', '.'))
         sales_df[['ILOSC', 'WARTOSC', 'SR_CENA']] = sales_df[['ILOSC', 'WARTOSC', 'SR_CENA']].astype(float)
 
+        # Maps products names
         products_names = self.__provide_products_name()
         sales_df['TOWAR'] = sales_df['INDEX_TOW'].map(products_names)
 
         return sales_df
 
     def __provide_costs_dataframe(self):
+        """Gets costs data from file and returns pandas dataframe
+
+        :return: dataframe with firm costs data
+        """
+
         costs_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/costs_5.CSV', encoding='latin1', sep=';')
         costs_df.columns.values[0] = 'KONTO'
         costs_df.columns.values[1] = "KATEGORIA"
@@ -44,12 +59,14 @@ class AnalyticsDataSource:
         costs_df = costs_df.iloc[:, [0, 1, 4, 6]]
         zmiana = {'£': 'ł', '¯': 'ż'}
         costs_df = costs_df.replace(zmiana, regex=True)
-
-
-
         return costs_df
 
     def __provide_lifestock_dataframe(self):
+        """Gets lifestock purchuse data and returns pandas dataframe
+
+        :return: dataframe with firm costs data
+        """
+
         lifestock_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/żywiec1.CSV', encoding='latin1', sep=';')
         lifestock_df[['WARTOSC']] = lifestock_df[['WARTOSC']].apply(
             lambda x: x.str.replace(',', '.'))
@@ -57,17 +74,22 @@ class AnalyticsDataSource:
         return lifestock_df
 
     def __provide_production_dataframe(self):
+        """Gets production data and returns pandas dataframe
+
+        :return: dataframe with firm production amounts
+        """
+
         sales_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/10.CSV', encoding='latin1', sep=';')
         return sales_df
 
     def __provide_products_name(self):
-        with open('/Users/tomaszkrauzy/Desktop/Pandas/towary.txt') as f:
+        with open('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/towary.txt') as f:
             products_names = {int(k): v for k, v in json.load(f).items()}
 
         return products_names
 
     def __provide_stores(self):
-        with open('/Users/tomaszkrauzy/Desktop/Pandas/indexy_nasze_sklepy.txt') as f:
+        with open('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/indexy_nasze_sklepy.txt') as f:
             stores = {int(k): v for k, v in json.load(f).items()}
 
         return stores
@@ -79,6 +101,6 @@ class AnalyticsDataSource:
         products_names = self.__provide_products_name()
         products_yield_dataframe = pd.DataFrame(products_yield.values(), index=products_yield.keys(), columns=['Yield'])
         products_yield_dataframe['TOWAR'] = products_yield_dataframe.index.map(products_names)
-
         return products_yield_dataframe
+
 

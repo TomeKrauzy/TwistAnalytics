@@ -74,7 +74,7 @@ class TreysParameters():
         We add upc for treys products which is the same as for base products
         :return:
         """
-        upc = UnitProductionCostsCalculator().calculate()
+        upc = UnitProductionCostsCalculator().provide_primary_products_UPC()
 
         trays_upc = {}
         for base_product_index, trays_product in self.product_map.items():
@@ -102,7 +102,7 @@ class TreysDepartment(TreysParameters):
         chcemy tutaj wyświetlić ramke z wynikiem na elementach, czyli ile zysku mamy na każdej pozycji
         :return:
         """
-        sr_cena_filet_vac_slowacja = 4.4 * 4.7328
+        sr_cena_filet_vac_slowacja = 4.4 * 4.0
         # Updatujemy śr cene dla TWIST SK
         self.trays_sales['SR_CENA'] = np.where((self.trays_sales['KOD_KONTR'] == 4674) & (self.trays_sales['INDEX_TOW'] == 1795), sr_cena_filet_vac_slowacja,
                                  self.trays_sales['SR_CENA'])

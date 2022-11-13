@@ -1,5 +1,4 @@
-class CostsContainer():
-
+class CostsContainer:
     def __init__(self, slaughter, confectionery, washing, workshop, stores, trucks, invoicing, administration, sales, general_costs, jail):
         self.slaughter = slaughter
         self.confectionery = confectionery

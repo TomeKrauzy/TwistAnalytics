@@ -2,14 +2,12 @@ from CostsCategorizer.CostsContainer import CostsContainer
 from CostsCategorizer.CostsUnitContainer import CostsUnitContainer
 
 
-# cmd + p podpowiada parametry
-
-class CostsCategorizer():
+class CostsCategorizer:
     """
     This class is responsible for categorizing all costs from accounts for more precise and specific categories
     that are used for farther unit production cost calculations.
 
-    This class returns cost amount that occured in specific period for specific business areas like: Transport.
+    This class returns cost amount that occured in specific period for specific business areas like: Transport, e.c.
     """
 
     def __init__(self, cost_dataframe):
@@ -24,11 +22,16 @@ class CostsCategorizer():
         return container
 
     def __provide_slaughter(self):
+        """
+        Ech method __provide_... returns CostsUnitCointainer class that can hold selected costs group like (labour,
+        depreciation e.c.
+        :return: CostsUnitContainer(unit_name, **kwargs)
+        """
         indexes = self.__provide_costs_categories_indexes()
         starting_index = indexes['UBÓJ']
-        stoping_index = indexes['ROZBIÓR']
+        stop_index = indexes['ROZBIÓR']
 
-        df = self.cost_dataframe.iloc[starting_index:stoping_index, ]
+        df = self.cost_dataframe.iloc[starting_index:stop_index, ]
         total_costs = df.iloc[0, 2]
         labour_costs = df[df['KATEGORIA'] == 'KOSZTY PRACY'].iloc[0, 2]
 
@@ -55,8 +58,8 @@ class CostsCategorizer():
         df = self.cost_dataframe.iloc[starting_index:stoping_index, ]
         total_costs = df.iloc[0, 2]
         labour_costs = df[df['KATEGORIA'] == 'KOSZTY PRACY'].iloc[0, 2]
-        washing = CostsUnitContainer('Rozbiór', total=total_costs, labour=labour_costs)
 
+        washing = CostsUnitContainer('Rozbiór', total=total_costs, labour=labour_costs)
         return washing
 
     def __provide_workshop(self):
@@ -69,7 +72,6 @@ class CostsCategorizer():
         labour_costs = df[df['KATEGORIA'] == 'KOSZTY PRACY'].iloc[0, 2]
 
         workshop = CostsUnitContainer('Warsztat', total=total_costs, labour=labour_costs)
-
         return workshop
 
     def __provide_shops(self):
@@ -86,8 +88,8 @@ class CostsCategorizer():
         df = self.cost_dataframe.iloc[starting_index:stoping_index, ]
         total_costs = df.iloc[0, 2]
         labour_costs = df[df['KATEGORIA'] == 'KOSZTY PRACY'].iloc[0, 2]
-        invoicing = CostsUnitContainer('Fakturowanie', total = total_costs, labour = labour_costs)
 
+        invoicing = CostsUnitContainer('Fakturowanie', total=total_costs, labour=labour_costs)
         return invoicing
 
     def __provide_administration(self):
@@ -98,8 +100,8 @@ class CostsCategorizer():
         df = self.cost_dataframe.iloc[starting_index:stoping_index, ]
         total_costs = df.iloc[0, 2]
         labour_costs = df[df['KATEGORIA'] == 'KOSZTY PRACY'].iloc[0, 2]
-        administration = CostsUnitContainer('Administracja', total = total_costs, labour = labour_costs)
 
+        administration = CostsUnitContainer('Administracja', total=total_costs, labour=labour_costs)
         return administration
 
     def __provide_trays(self):
@@ -110,8 +112,8 @@ class CostsCategorizer():
         df = self.cost_dataframe.iloc[starting_index:stoping_index, ]
         total_costs = df.iloc[0, 2]
         labour_costs = df[df['KATEGORIA'] == 'KOSZTY PRACY'].iloc[:, 2]
-        trays = CostsUnitContainer('Tacki', total=total_costs, labour=labour_costs)
 
+        trays = CostsUnitContainer('Tacki', total=total_costs, labour=labour_costs)
         return trays
 
     def __provide_general_costs(self):
@@ -122,8 +124,8 @@ class CostsCategorizer():
         df = self.cost_dataframe.iloc[starting_index:stoping_index, ]
         total_costs = df.iloc[0, 2]
         labour_costs = df[df['KATEGORIA'] == 'KOSZTY PRACY'].iloc[0, 2]
-        general_costs = CostsUnitContainer('Koszty ogólne', total=total_costs, labour=labour_costs)
 
+        general_costs = CostsUnitContainer('Koszty ogólne', total=total_costs, labour=labour_costs)
         return general_costs
 
     def __provide_jail(self):
@@ -133,18 +135,18 @@ class CostsCategorizer():
         df = self.cost_dataframe.iloc[starting_index:, ]
         total_costs = df.iloc[0, 2]
         labour_costs = df[df['KATEGORIA'] == 'KOSZTY PRACY'].iloc[:, 2]
-        jail = CostsUnitContainer('Jail', total=total_costs, labour=labour_costs)
 
+        jail = CostsUnitContainer('Jail', total=total_costs, labour=labour_costs)
         return jail
 
     def __provide_costs_categories_indexes(self):
         """
-        Provides starting indexes of diffrent cost categories in df
+        Provides starting indexes of different cost categories in df
+        This step is necessary because of data structure that is provided
         :return: dictionary {Category: Index}
         """
 
         df = self.cost_dataframe
         costs_categories_indexes = {df.iloc[i, 1]: i for i in
                                     df[df['KONTO'] > 500].index}
-
         return costs_categories_indexes

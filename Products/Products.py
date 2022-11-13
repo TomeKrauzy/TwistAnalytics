@@ -1,28 +1,10 @@
-from DataSource.AnalyticsDataSource import AnalyticsDataSource
 import pandas as pd
+from GlobalParameters.ProductionParameters import ProductionParameters
 
-class ProductionParameters():
-    products_yelds = AnalyticsDataSource().provide().products_yield
-    labor_hour_cost = 50
-    avg_lifestock_weight = 3
 
-    # elements/hour
-    confectionery_speed = 2760
-    # lifestock/hour
-    slaughter_speed = 3720
-    # breast line speed, cone/hour
-    breast_speed = 2520
-    # deboning_efficiency kg/h
-    tigh_deboning_efficiency = 32
-    leg_deboning_efficiency = 32
-
-    # avg monthly lifestock quantity
-    avg_monthly_lifestock = 2000000
-
-# Tuszka
 class Carcass(ProductionParameters):
     """
-    Class for Carcess used for further confection
+    Class for Carcass used for further confection
     """
 
     def __init__(self):
@@ -32,13 +14,11 @@ class Carcass(ProductionParameters):
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
+        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Tuszka']['Yield']
 
-        yeld = self.products_yelds[self.products_yelds['TOWAR'] == 'Tuszka']['Yield']
-
-        production_in_kg_per_hour = self.slaughter_speed * self.avg_lifestock_weight * yeld
-        labour_costs_per_hour = self.labour * self.labor_hour_cost
+        production_in_kg_per_hour = self.SLAUGHTER_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
+        labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
         labour_costs_markup = labour_costs_per_hour / production_in_kg_per_hour
-
         return labour_costs_markup
 
     def __provide_labour_amount(self):
@@ -57,7 +37,6 @@ class Carcass(ProductionParameters):
                         'wywóz_palet': 2,
                         'brygadzisci': 2,
                         }
-
         return sum(labour_units.values())
 
 
@@ -87,191 +66,166 @@ class Carcass_sale(Carcass):
         return sum(labour_units.values())
 
     def __provide_labour_markup(self):
+        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Tuszka']['Yield']
 
-        yeld = self.products_yelds[self.products_yelds['TOWAR'] == 'Tuszka']['Yield']
-
-        production_in_kg_per_hour = self.slaughter_speed * self.avg_lifestock_weight * yeld
-        labour_costs_per_hour = self.labour * self.labor_hour_cost
+        production_in_kg_per_hour = self.SLAUGHTER_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
+        labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
         labour_costs_markup = labour_costs_per_hour / production_in_kg_per_hour
-
         return labour_costs_markup
 
-class Gizzard(ProductionParameters):
 
+class Gizzard(ProductionParameters):
     def __init__(self):
         super().__init__()
-        # How much people are involved in production process
         self.labour = 1
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
+        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Żołądek']['Yield']
 
-        yeld = self.products_yelds[self.products_yelds['TOWAR'] == 'Żołądek']['Yield']
-
-        production_in_kg_per_hour = self.slaughter_speed * self.avg_lifestock_weight * yeld
-        labour_costs_per_hour = self.labour * self.labor_hour_cost
+        production_in_kg_per_hour = self.SLAUGHTER_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
+        labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
         labour_costs_markup = labour_costs_per_hour / production_in_kg_per_hour
-
         return labour_costs_markup
 
 
 class Liver(ProductionParameters):
-
     def __init__(self):
         super().__init__()
-        # How much people are involved in production process
         self.labour = 1
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
-        yeld = self.products_yelds[self.products_yelds['TOWAR'] == 'Wątroba']['Yield']
+        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Wątroba']['Yield']
 
-        production_in_kg_per_hour = self.slaughter_speed * self.avg_lifestock_weight * yeld
-        labour_costs_per_hour = self.labour * self.labor_hour_cost
+        production_in_kg_per_hour = self.SLAUGHTER_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
+        labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
         labour_costs_markup = labour_costs_per_hour / production_in_kg_per_hour
-
         return labour_costs_markup
 
 
 class Heart(ProductionParameters):
-
     def __init__(self):
         super().__init__()
-        # How much people are involved in production process
         self.labour = 1
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
-        yeld = self.products_yelds[self.products_yelds['TOWAR'] == 'Serce']['Yield']
+        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Serce']['Yield']
 
-        production_in_kg_per_hour = self.slaughter_speed * self.avg_lifestock_weight * yeld
-        labour_costs_per_hour = self.labour * self.labor_hour_cost
+        production_in_kg_per_hour = self.SLAUGHTER_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
+        labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
         labour_costs_markup = labour_costs_per_hour / production_in_kg_per_hour
-
         return labour_costs_markup
 
 
 class Wing(ProductionParameters):
-
     def __init__(self):
         super().__init__()
-        # How much people are involved in production process
         self.labour = 1
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
+        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Skrzydło']['Yield']
 
-        yeld = self.products_yelds[self.products_yelds['TOWAR'] == 'Skrzydło']['Yield']
-
-        production_in_kg_per_hour = self.confectionery_speed * self.avg_lifestock_weight * yeld
-        labour_costs_per_hour = self.labour * self.labor_hour_cost
+        production_in_kg_per_hour = self.CONFECIONERY_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
+        labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
         labour_costs_markup = labour_costs_per_hour / production_in_kg_per_hour
 
         # Here we add 1/3 of carcass upc, because we need to markup it's costs on further products
         # that carcass is processed into. (breast, quarter, wing)
         labour_costs_markup += Carcass().labour_markup.values[0] / 3
-
         return labour_costs_markup
-
 
 
 class Quarter(ProductionParameters):
-
     def __init__(self):
         super().__init__()
-        # How much people are involved in production process
         self.labour = 1
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
+        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Ćwiartka']['Yield']
 
-        yeld = self.products_yelds[self.products_yelds['TOWAR'] == 'Ćwiartka']['Yield']
-
-        production_in_kg_per_hour = self.confectionery_speed * self.avg_lifestock_weight * yeld
-        labour_costs_per_hour = self.labour * self.labor_hour_cost
+        production_in_kg_per_hour = self.CONFECIONERY_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
+        labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
         labour_costs_markup = labour_costs_per_hour / production_in_kg_per_hour
 
         # Here we add 1/3 of carcass upc, because we need to markup it's costs on further products
         # that carcass is processed into. (breast, quarter, wing)
         labour_costs_markup += Carcass().labour_markup.values[0] / 3
-
         return labour_costs_markup
+
 
 class Breast(ProductionParameters):
-
     def __init__(self):
         super().__init__()
-        # How much people are involved in production process
         self.labour = 1
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
+        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Filet']['Yield']
 
-        yeld = self.products_yelds[self.products_yelds['TOWAR'] == 'Filet']['Yield']
-
-        production_in_kg_per_hour = self.breast_speed * self.avg_lifestock_weight * yeld
-        labour_costs_per_hour = self.labour * self.labor_hour_cost
+        production_in_kg_per_hour = self.BREAST_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
+        labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
         labour_costs_markup = labour_costs_per_hour / production_in_kg_per_hour
 
         # Here we add 1/3 of carcass upc, because we need to markup it's costs on further products
         # that carcass is processed into. (breast, quarter, wing)
         labour_costs_markup += Carcass().labour_markup.values[0] / 3
-
         return labour_costs_markup
+
 
 class Portion(ProductionParameters):
-
     def __init__(self):
         super().__init__()
-        # How much people are involved in production process
         self.labour = 1
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
+        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Porcja']['Yield']
 
-        yeld = self.products_yelds[self.products_yelds['TOWAR'] == 'Porcja']['Yield']
-
-        production_in_kg_per_hour = self.breast_speed * self.avg_lifestock_weight * yeld
-        labour_costs_per_hour = self.labour * self.labor_hour_cost
+        production_in_kg_per_hour = self.BREAST_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
+        labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
         labour_costs_markup = labour_costs_per_hour / production_in_kg_per_hour
 
         # Here we add 1/3 of carcass upc, because we need to markup it's costs on further products
         # that carcass is processed into. (breast, quarter, wing)
         labour_costs_markup += Carcass().labour_markup.values[0] / 3
-
         return labour_costs_markup
 
-#------------------------------------- Elements from Quarter ------------------------------------------------------
+
+# ------------------------------------- Elements from Quarter ------------------------------------------------------
 class Leg(ProductionParameters):
     def __init__(self):
         super().__init__()
-        # How much people are involved in production process
         self.labour = 1
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
-        yeld = self.products_yelds[self.products_yelds['TOWAR'] == 'Noga']['Yield']
+        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Noga']['Yield']
 
-        production_in_kg_per_hour = self.confectionery_speed * self.avg_lifestock_weight * yeld
-        labour_costs_per_hour = self.labour * self.labor_hour_cost
+        production_in_kg_per_hour = self.CONFECIONERY_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
+        labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
         labour_costs_markup = labour_costs_per_hour / production_in_kg_per_hour
         return labour_costs_markup
 
-class Tigh(ProductionParameters):
+
+class Thigh(ProductionParameters):
     def __init__(self):
         super().__init__()
-        # How much people are involved in production process
         self.labour = 1
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
-        yeld = self.products_yelds[self.products_yelds['TOWAR'] == 'Udziec']['Yield']
+        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Udziec']['Yield']
 
-        production_in_kg_per_hour = self.confectionery_speed * self.avg_lifestock_weight * yeld
-        labour_costs_per_hour = self.labour * self.labor_hour_cost
+        production_in_kg_per_hour = self.CONFECIONERY_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
+        labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
         labour_costs_markup = labour_costs_per_hour / production_in_kg_per_hour
         labour_costs_markup = pd.Series(labour_costs_markup, index=[248])
         return labour_costs_markup
+
 
 class Shank(ProductionParameters):
     def __init__(self):
@@ -281,27 +235,28 @@ class Shank(ProductionParameters):
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
-        yeld = self.products_yelds[self.products_yelds['TOWAR'] == 'Podudzie']['Yield']
+        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Podudzie']['Yield']
 
-        production_in_kg_per_hour = self.confectionery_speed * self.avg_lifestock_weight * yeld
-        labour_costs_per_hour = self.labour * self.labor_hour_cost
+        production_in_kg_per_hour = self.CONFECIONERY_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
+        labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
         labour_costs_markup = labour_costs_per_hour / production_in_kg_per_hour
         labour_costs_markup = pd.Series(labour_costs_markup, index=[240])
         return labour_costs_markup
 
+
 class Leg_deboned(ProductionParameters):
     def __init__(self):
         super().__init__()
-        # How much people are involved in production process
         self.labour = 8
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
-        production_in_kg_per_hour = self.leg_deboning_efficiency * self.labour
-        labour_costs_per_hour = self.labour * self.labor_hour_cost
+        production_in_kg_per_hour = self.LEG_DEBONING_EFFICIENCY * self.labour
+        labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
         labour_costs_markup = labour_costs_per_hour / production_in_kg_per_hour
         labour_costs_markup = pd.Series(labour_costs_markup, index=[12013])
         return labour_costs_markup
+
 
 class Tigh_deboned(ProductionParameters):
     def __init__(self):
@@ -311,10 +266,9 @@ class Tigh_deboned(ProductionParameters):
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
-        production_in_kg_per_hour = self.tigh_deboning_efficiency * self.labour
-        labour_costs_per_hour = self.labour * self.labor_hour_cost
+        production_in_kg_per_hour = self.TIGH_DEBONING_EFFICIENCY * self.labour
+        labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
         labour_costs_markup = labour_costs_per_hour / production_in_kg_per_hour
         labour_costs_markup = pd.Series(labour_costs_markup, index=[9859])
 
         return labour_costs_markup
-

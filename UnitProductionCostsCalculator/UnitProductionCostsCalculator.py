@@ -18,10 +18,10 @@ class UnitProductionCostsCalculator():
 
     def __init__(self):
 
-        self.costs_dataframe = CostsCategorizer(AnalyticsDataSource().provide().costs).provide_data()
-        self.yelds = ProductionParameters().products_yelds
+        self.costs_dataframe = CostsCategorizer(AnalyticsDataSource().provide_data().costs).provide_data()
+        self.yelds = ProductionParameters().PRODUCTS_YELDS
 
-    def calculate(self):
+    def provide_primary_products_UPC(self):
         """
         :return: pd.Series with product id as index and UPC as value
         """
@@ -34,10 +34,20 @@ class UnitProductionCostsCalculator():
 
         return df
 
+    def provide_treys_products_UPC(self):
+        primary_products_upc_df = self.provide_primary_products_UPC()
+        trays_upc = {}
+
+        for base_product_index, trays_product in self.product_map.items():
+            for product in trays_product:
+                trays_upc[product] = upc.loc[base_product_index]
+        df = pd.concat([pd.Series(trays_upc), upc])
+
+        return df
 
     def __provide_carcass_costs_markup(self):
-        slaughter_speed = ProductionParameters().slaughter_speed
-        avg_lifestock_monthly = ProductionParameters().avg_monthly_lifestock
+        slaughter_speed = ProductionParameters().SLAUGHTER_SPEED
+        avg_lifestock_monthly = ProductionParameters().AVG_MONTHLY_LIFESTOCK
         carcass_yeld = self.yelds[self.yelds['TOWAR'] == 'Tuszka']['Yield']
 
         # Slaughter markup
@@ -141,7 +151,7 @@ class UnitProductionCostsCalculator():
 
         return upc
     def __provide_tigh_UPC(self):
-        tigh = Tigh()
+        tigh = Thigh()
         upc = tigh.labour_markup
 
         return upc
@@ -158,7 +168,7 @@ class UnitProductionCostsCalculator():
         return upc
 
     def __provide_tigh_deboned_UPC(self):
-        tig_deboned = Tigh_deboned()
-        upc = tig_deboned.labour_markup
+        tigh_deboned = Tigh_deboned()
+        upc = tigh_deboned.labour_markup
 
         return upc
