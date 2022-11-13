@@ -1,6 +1,7 @@
 import pandas as pd
 from GlobalParameters.ProductionParameters import ProductionParameters
 
+
 class LifestockPurchasePriceSplitter():
 
     def __init__(self, production_resource_dataframe, avg_wholesales_prices, products_yield, avg_lifestock_price):
@@ -9,17 +10,17 @@ class LifestockPurchasePriceSplitter():
         self.products_yield = products_yield
         self.avg_lifestock_price = avg_lifestock_price
 
-    def all_products_purchase_price_splitted(self):
+    def provide_acquisition_cost_all_products(self):
         """Combines 2 methods and returns DataFrame with acquisition cost for all products
 
         :return: DataFrame that contains acquisition cost for all products e.i Carcass, wing, deboned thigh ...
         """
 
-        result_df = pd.concat([self.__quarter_purchuse_price_splitter()['koszt_pozyskania_towaru [zł/kg]'],
-                               self.__split_lifestock_purchuse_price()['koszt_pozyskania_towaru [zł/kg]']])
+        result_df = pd.concat([self.__split_quarter_acquisition_price()['koszt_pozyskania_towaru [zł/kg]'],
+                               self.__provide_acquisition_cost_primary_products()['koszt_pozyskania_towaru [zł/kg]']])
         return result_df
 
-    def __split_lifestock_purchuse_price(self):
+    def __provide_acquisition_cost_primary_products(self):
         """Distributes lifestock price among elements according to specific methodology, for further understanding
         ask Tomasz Krauzy or deduce from code ;)
 
@@ -63,13 +64,13 @@ class LifestockPurchasePriceSplitter():
 
         return df
 
-    def __quarter_purchuse_price_splitter(self):
-        """Distributes quarter acquisition cost for further elements: noga, podudzie, nogaT..
+    def __split_quarter_acquisition_price(self):
+        """Distributes quarter acquisition cost for fur1ther elements: leg, shank, deboned leg e.c.
 
-        :return: DataFrame
+        :return: DataFrame with acquisition cost for products after quarter processing
         """
 
-        quarter_purchase_price = self.__split_lifestock_purchuse_price().filter(items=['Ćwiartka'], axis=0).loc[:,
+        quarter_purchase_price = self.__provide_acquisition_cost_primary_products().filter(items=['Ćwiartka'], axis=0).loc[:,
                                  'Wielkość ceny zakupu [% udział w zysku * cena zakupu]'].iat[0]
         quarter_yield = self.products_yield.filter(items=[7437], axis=0)['Yield'].iat[0]
 

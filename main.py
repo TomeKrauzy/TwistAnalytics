@@ -42,7 +42,7 @@ costs_categorizer = CostsCategorizer(dataframe_container.costs)
 
 costs_container = costs_categorizer.provide_data()
 
-print(lifestock_purchuse_price_splitter.all_products_purchase_price_splitted())
+print(lifestock_purchuse_price_splitter.provide_acquisition_cost_all_products())
 
 # print(dataframe_container.products_yield)
 
