@@ -16,8 +16,7 @@ def provide_yelds():
 
 class ProductionParameters:
 
-    products_yields = provide_yelds()
-    PRODUCTS_YELDS = AnalyticsDataSource().provide_data().products_yield
+    PRODUCTS_YIELDS = provide_yelds()
     LABOUR_HOUR_COST = 50
     AVG_LIFESTOCK_WEIGHT = 3
     # elements/hour

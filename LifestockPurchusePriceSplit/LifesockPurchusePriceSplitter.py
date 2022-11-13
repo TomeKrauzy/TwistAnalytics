@@ -4,10 +4,10 @@ from GlobalParameters.ProductionParameters import ProductionParameters
 
 class LifestockPurchasePriceSplitter():
 
-    def __init__(self, production_resource_dataframe, avg_wholesales_prices, products_yield, avg_lifestock_price):
+    def __init__(self, production_resource_dataframe, avg_wholesales_prices, avg_lifestock_price):
         self.production_resource_dataframe = production_resource_dataframe
         self.avg_wholesales_prices = avg_wholesales_prices
-        self.products_yield = products_yield
+        self.products_yield = ProductionParameters.PRODUCTS_YIELDS
         self.avg_lifestock_price = avg_lifestock_price
 
     def provide_acquisition_cost_all_products(self):
@@ -29,7 +29,7 @@ class LifestockPurchasePriceSplitter():
 
         primary_products = [260, 7437, 63, 156, 61, 185, 183, 74]
 
-        products_yield = ProductionParameters.products_yields
+        products_yield = ProductionParameters.PRODUCTS_YIELDS
         products_yield = products_yield[products_yield.index.isin(primary_products)]
         products_yield = products_yield.set_index('TOWAR')
 

@@ -19,7 +19,7 @@ class UnitProductionCostsCalculator():
     def __init__(self):
 
         self.costs_dataframe = CostsCategorizer(AnalyticsDataSource().provide_data().costs).provide_data()
-        self.yelds = ProductionParameters().PRODUCTS_YELDS
+        self.yelds = ProductionParameters().PRODUCTS_YIELDS
 
     def provide_primary_products_UPC(self):
         """

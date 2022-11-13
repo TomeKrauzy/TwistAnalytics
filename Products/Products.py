@@ -13,7 +13,7 @@ class Carcass(ProductionParameters):
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
-        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Tuszka']['Yield']
+        yeld = self.PRODUCTS_YIELDS[self.PRODUCTS_YIELDS['TOWAR'] == 'Tuszka']['Yield']
 
         production_in_kg_per_hour = self.SLAUGHTER_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
         labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
@@ -40,8 +40,7 @@ class Carcass(ProductionParameters):
 
 
 class Carcass_sale(Carcass):
-    """
-    Class for Carcass sold as a whole
+    """Class for Carcass sold as a whole
     """
 
     def __init__(self):
@@ -51,9 +50,9 @@ class Carcass_sale(Carcass):
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_amount(self):
-        """
-        Here we do add extra labour_units on top of the Carcass class
-        :return:
+        """Adds extra labour_units on top of the Carcass class
+
+        :return: amount of labour unit
         """
         labour_units = {
             'Przenośnik_taśmowy_zawieszanie': 2,
@@ -65,7 +64,7 @@ class Carcass_sale(Carcass):
         return sum(labour_units.values())
 
     def __provide_labour_markup(self):
-        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Tuszka']['Yield']
+        yeld = self.PRODUCTS_YIELDS[self.PRODUCTS_YIELDS['TOWAR'] == 'Tuszka']['Yield']
 
         production_in_kg_per_hour = self.SLAUGHTER_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
         labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
@@ -80,7 +79,7 @@ class Gizzard(ProductionParameters):
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
-        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Żołądek']['Yield']
+        yeld = self.PRODUCTS_YIELDS[self.PRODUCTS_YIELDS['TOWAR'] == 'Żołądek']['Yield']
 
         production_in_kg_per_hour = self.SLAUGHTER_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
         labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
@@ -95,7 +94,7 @@ class Liver(ProductionParameters):
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
-        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Wątroba']['Yield']
+        yeld = self.PRODUCTS_YIELDS[self.PRODUCTS_YIELDS['TOWAR'] == 'Wątroba']['Yield']
 
         production_in_kg_per_hour = self.SLAUGHTER_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
         labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
@@ -110,7 +109,7 @@ class Heart(ProductionParameters):
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
-        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Serce']['Yield']
+        yeld = self.PRODUCTS_YIELDS[self.PRODUCTS_YIELDS['TOWAR'] == 'Serce']['Yield']
 
         production_in_kg_per_hour = self.SLAUGHTER_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
         labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
@@ -125,7 +124,7 @@ class Wing(ProductionParameters):
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
-        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Skrzydło']['Yield']
+        yeld = self.PRODUCTS_YIELDS[self.PRODUCTS_YIELDS['TOWAR'] == 'Skrzydło']['Yield']
 
         production_in_kg_per_hour = self.CONFECIONERY_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
         labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
@@ -144,7 +143,7 @@ class Quarter(ProductionParameters):
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
-        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Ćwiartka']['Yield']
+        yeld = self.PRODUCTS_YIELDS[self.PRODUCTS_YIELDS['TOWAR'] == 'Ćwiartka']['Yield']
 
         production_in_kg_per_hour = self.CONFECIONERY_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
         labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
@@ -163,7 +162,7 @@ class Breast(ProductionParameters):
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
-        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Filet']['Yield']
+        yeld = self.PRODUCTS_YIELDS[self.PRODUCTS_YIELDS['TOWAR'] == 'Filet']['Yield']
 
         production_in_kg_per_hour = self.BREAST_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
         labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
@@ -182,7 +181,7 @@ class Portion(ProductionParameters):
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
-        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Porcja']['Yield']
+        yeld = self.PRODUCTS_YIELDS[self.PRODUCTS_YIELDS['TOWAR'] == 'Porcja']['Yield']
 
         production_in_kg_per_hour = self.BREAST_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
         labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
@@ -202,7 +201,7 @@ class Leg(ProductionParameters):
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
-        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Noga']['Yield']
+        yeld = self.PRODUCTS_YIELDS[self.PRODUCTS_YIELDS['TOWAR'] == 'Noga']['Yield']
 
         production_in_kg_per_hour = self.CONFECIONERY_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
         labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
@@ -217,7 +216,7 @@ class Thigh(ProductionParameters):
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
-        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Udziec']['Yield']
+        yeld = self.PRODUCTS_YIELDS[self.PRODUCTS_YIELDS['TOWAR'] == 'Udziec']['Yield']
 
         production_in_kg_per_hour = self.CONFECIONERY_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
         labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST
@@ -234,7 +233,7 @@ class Shank(ProductionParameters):
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):
-        yeld = self.PRODUCTS_YELDS[self.PRODUCTS_YELDS['TOWAR'] == 'Podudzie']['Yield']
+        yeld = self.PRODUCTS_YIELDS[self.PRODUCTS_YIELDS['TOWAR'] == 'Podudzie']['Yield']
 
         production_in_kg_per_hour = self.CONFECIONERY_SPEED * self.AVG_LIFESTOCK_WEIGHT * yeld
         labour_costs_per_hour = self.labour * self.LABOUR_HOUR_COST

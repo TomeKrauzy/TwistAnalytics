@@ -32,7 +32,7 @@ avg_lifestock_price = average_lifestock_price_generator.provide_avg_lifestock_pu
 
 from LifestockPurchusePriceSplit.LifesockPurchusePriceSplitter import LifestockPurchasePriceSplitter
 
-lifestock_purchuse_price_splitter = LifestockPurchasePriceSplitter(dataframe_container.production, average_generator.generate(AverageSalesPricesReportScope.WHOLESALE), dataframe_container.products_yield, avg_lifestock_price)
+lifestock_purchuse_price_splitter = LifestockPurchasePriceSplitter(dataframe_container.production, average_generator.generate(AverageSalesPricesReportScope.WHOLESALE), avg_lifestock_price)
 
 
 
