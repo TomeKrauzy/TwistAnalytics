@@ -4,21 +4,21 @@ from CostsCategorizer.CostsCategorizer import CostsCategorizer
 from DataSource.AnalyticsDataSource import AnalyticsDataSource
 from GlobalParameters.ClassificationData import ClassificationData
 
-class UnitProductionCostsCalculator():
+
+class UnitProductionCostsCalculator:
 
     """
-    A class to combine labour_markup and costs markup.
+    A class to combine labour_markup with calculated cost markup.
 
-    External function: calculate() returns DataFrame with UnitProductionCost for all base elements
+    Public methods:
+        provide_primary_products_UPC() returns DataFrame with UnitProductionCost for all base elements
+        provide_treys_products_UPC() returns DataFrame with UnitProductionCost for treys
 
     Important information:
-
         labour_markup is collected from Product classes.
-
     """
 
     def __init__(self):
-
         self.costs_dataframe = CostsCategorizer(AnalyticsDataSource().provide_data().costs).provide_data()
         self.yelds = ProductionParameters().PRODUCTS_YIELDS
 
@@ -34,7 +34,6 @@ class UnitProductionCostsCalculator():
                         self.__provide_tigh_UPC(), self.__provide_shank_UPC(), self.__provide_leg_deboned_UPC(),
                         self.__provide_tigh_deboned_UPC()])
         df = df.rename('UPC')
-
         return df
 
     def provide_treys_products_UPC(self):
@@ -84,11 +83,10 @@ class UnitProductionCostsCalculator():
         general_costs_markup = (general_costs.total - general_costs.labour) / (
                 avg_lifestock_monthly * carcass_yeld)
 
-        result = general_costs_markup + administration_costs_markup + washing_costs_markup + invoicing_costs_markup + slaughter_costs_markup
+        result = general_costs_markup + administration_costs_markup + washing_costs_markup + invoicing_costs_markup\
+                 + slaughter_costs_markup
 
         return result
-
-
 
 
     def __provide_carcass_UPC(self):
@@ -98,8 +96,8 @@ class UnitProductionCostsCalculator():
         return upc
 
     def __provide_carcass_sale_UPC(self):
-        """
-        Here we add costs of selling the carcass as a whole
+        """Adds costs of selling the carcass as a whole
+
         :return: Carcass_sale_upc
         """
         carcass_sale = Carcass_sale()
@@ -150,7 +148,8 @@ class UnitProductionCostsCalculator():
 
         return upc
 
-# ------------------------------------- Elements from Quarter ------------------------------------------------------
+
+    # region Elements from Quarter
     def __provide_leg_UPC(self):
         leg = Leg()
         upc = leg.labour_markup
@@ -178,3 +177,5 @@ class UnitProductionCostsCalculator():
         upc = tigh_deboned.labour_markup
 
         return upc
+
+    # endregion

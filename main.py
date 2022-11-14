@@ -7,24 +7,16 @@ from Reports.Sales.SalesReportGenerator import SalesReportGenerator
 
 from Reports.Average.AverageLifestockPriceGenerator import AverageLifestockPriceGenerator
 
-# tworze instancje analyticsDataSource i wywołuje metode provide, która dostarcza
-# dataframe_container(zawiera wszystkie potrzebne do obliczeń dataframy)
 analytics_data_source = DataSource.AnalyticsDataSource()
 dataframe_container = analytics_data_source.provide_data()
 
-# tworze instancje AverageSalesPricesReportGenerator, zeby móc odwoływać się do metody
-# generate, gdzie wybieram zakres raportu
 average_generator = AverageSalesPricesReportGenerator(dataframe_container.sales, dataframe_container.stores)
 
 wholesale_report = average_generator.generate(AverageSalesPricesReportScope.WHOLESALE)
 stores_report = average_generator.generate(AverageSalesPricesReportScope.STORES)
 
-# tworze instancje SalesReportGenerator, zeby móc odwoływać się do metody
-# generate, gdzie wybieram zakres raportu dla sprzedaży
 sales_generator = SalesReportGenerator(dataframe_container.sales, dataframe_container.stores)
-
 all_sales_report = sales_generator.generate(SalesReportScope.ALL)
-
 
 average_lifestock_price_generator = AverageLifestockPriceGenerator(dataframe_container.lifestock)
 avg_lifestock_price = average_lifestock_price_generator.provide_avg_lifestock_purchuse_price()
@@ -60,7 +52,7 @@ tkw_df = UnitProductionCostsCalculator().provide_primary_products_UPC()
 
 treys = TreysDepartment(dataframe_container.sales, wholesale_report)
 
-treys_raport = treys.generate_raport()
+treys_raport = treys.generate_report()
 
 treys_raport.to_excel("raport_tacki_Październik.xlsx",
           sheet_name='Krauzy_Tomasz')
@@ -70,4 +62,5 @@ treys_raport.to_excel("raport_tacki_Październik.xlsx",
 
 d = UnitProductionCostsCalculator().provide_primary_products_UPC()
 
-print(d)
+
+# print(treys.summary_df.columns)

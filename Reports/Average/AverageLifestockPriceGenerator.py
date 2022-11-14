@@ -1,5 +1,5 @@
 
-class AverageLifestockPriceGenerator():
+class AverageLifestockPriceGenerator:
 
     def __init__(self, lifestock_dataframe):
         self.lifestock_dataframe = lifestock_dataframe

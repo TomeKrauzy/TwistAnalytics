@@ -1,6 +1,7 @@
 from Reports.Average.AverageSalesPricesReportScope import AverageSalesPricesReportScope as Scope
 
-class AverageSalesPricesReportGenerator():
+
+class AverageSalesPricesReportGenerator:
 
     def __init__(self, sales_dataframe, stores_dataframe):
         self.sales_dataframe = sales_dataframe
