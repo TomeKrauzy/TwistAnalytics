@@ -1,17 +1,12 @@
 # TwistAnalytics
-> Project to manage poultry firm data and managerial accountng reports. 
+> Project to manage poultry production firm's data and managerial accountng reports to create more data-drven decisions. 
 
 ## Table of Contents
 * [General Info](#general-information)
 * [Technologies Used](#technologies-used)
 * [Features](#features)
-* [Screenshots](#screenshots)
-* [Setup](#setup)
-* [Usage](#usage)
+* [Packages used](#packages-used)
 * [Project Status](#project-status)
-* [Room for Improvement](#room-for-improvement)
-* [Acknowledgements](#acknowledgements)
-* [Contact](#contact)
 <!-- * [License](#license) -->
 
 
@@ -29,22 +24,12 @@
 - Cost categorization module (extracting data from expense accounts and labeling them for further use)
 - Report generator module
 
-## Setup
-What are the project requirements/dependencies? Where are they listed? A requirements.txt or a Pipfile.lock file perhaps? Where is it located?
-
-Proceed to describe how to install / setup one's local environment / get started with the project.
-
-
-## Usage
-How does one go about using it?
-Provide various use cases and code examples here.
-
-`write-your-code-here`
-
+## Packages Used
+- pandas 1.5.1
+- numpy 1.23.4
 
 ## Project Status
 Project is: _in progress_ 
 
-
-## Contact
-Created by Tomasz Krauzy - feel free to contact me!
+## 
+Created by Tomasz Krauzy
