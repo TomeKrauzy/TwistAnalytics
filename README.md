@@ -1,5 +1,5 @@
 # TwistAnalytics
-> Project to manage poultry firm sales data, managerial accountng and margins calculations
+> Project to manage poultry firm data and managerial accountng reports. 
 
 ## Table of Contents
 * [General Info](#general-information)
@@ -16,25 +16,18 @@
 
 
 ## General Information
-- Project is a fully fladged tool for analysing data for poultry processing firm. It implements 
-- I did undertake this projects to create tool for real-world problem and to develop my coding skills 
+- Project is a tool for analysing data for poultry processing firm. It was created for company board to eneable more data-diven decisions through automated raports and analysis
+- I did undertake this projects to create tool for real-world problem and to sharpen my coding skills
 
 ## Technologies Used
-- pandas - ?
-- numpy - ?
-
+- Python 3.9.2
 
 ## Features
-List the ready features here:
-- Awesome feature 1
-- Awesome feature 2
-- Awesome feature 3
-
-
-## Screenshots
-![Example screenshot](./img/screenshot.png)
-<!-- If you have screenshots you'd like to share, include them here. -->
-
+- Data import and preparation module
+- Acqusition cost calculation module
+- Unit cost production calculation module
+- Cost categorization module (extracting data from expense accounts and labeling them for further use)
+- Report generator module
 
 ## Setup
 What are the project requirements/dependencies? Where are they listed? A requirements.txt or a Pipfile.lock file perhaps? Where is it located?
