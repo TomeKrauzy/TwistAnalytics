@@ -158,7 +158,7 @@ class Quarter(ProductionParameters):
 class Breast(ProductionParameters):
     def __init__(self):
         super().__init__()
-        self.labour = 1
+        self.labour = 12
         self.labour_markup = self.__provide_labour_markup()
 
     def __provide_labour_markup(self):

@@ -10,6 +10,7 @@ from Reports.Average.AverageLifestockPriceGenerator import AverageLifestockPrice
 analytics_data_source = DataSource.AnalyticsDataSource()
 dataframe_container = analytics_data_source.provide_data()
 
+
 average_generator = AverageSalesPricesReportGenerator(dataframe_container.sales, dataframe_container.stores)
 
 wholesale_report = average_generator.generate(AverageSalesPricesReportScope.WHOLESALE)
@@ -57,10 +58,10 @@ treys_raport = treys.generate_report()
 treys_raport.to_excel("raport_tacki_Październik.xlsx",
           sheet_name='Krauzy_Tomasz')
 
+from Reports.Shops.ShopProfitabilityReportGenerator import ShopProfitabilityReportGenerator
+acquisition_costs = lifestock_purchuse_price_splitter.provide_acquisition_cost_all_products()
+shop_raport_generator = ShopProfitabilityReportGenerator(dataframe_container.sales, acquisition_costs)
+
+print(shop_raport_generator.generate()[1])
 
 
-
-d = UnitProductionCostsCalculator().provide_primary_products_UPC()
-
-
-# print(treys.summary_df.columns)
