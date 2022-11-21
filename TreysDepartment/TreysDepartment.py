@@ -8,13 +8,14 @@ pd.set_option('display.float_format', lambda x: '%.3f' % x)
 
 class TreysDepartment(TreysParameters):
 
-    def __init__(self, sales_dataframe, avg_wholesale_prices):
+    def __init__(self, sales_dataframe, avg_wholesale_prices, acqusition_cost_df):
         super().__init__()
         self.sales = sales_dataframe
         self.product_names = ClassificationData.products_labels
         self.avg_wholesale_prices = avg_wholesale_prices
         self.trays_sales = self.sales[(self.sales['INDEX_TOW'].isin(self.trays_products))
                                       | (self.sales['KOD_KONTR'].isin([6011, 4859]))]
+        self.acquisition_cost = acqusition_cost_df
 
         self.__provide_package_lables()
         self.__calculate_packages_boxes()
@@ -35,11 +36,12 @@ class TreysDepartment(TreysParameters):
         summary_df['MARŻA'] = (summary_df['SR_CENA'] - summary_df['ŚR_CENA_HURT']) * summary_df['ILOSC']
         summary_df['WYNIK'] = summary_df['MARŻA'] - summary_df['KOSZT_OPAKOWAN_ALL']
 
+
         real_income = summary_df['WARTOSC'].sum() - summary_df['KOSZT_OPAKOWAN_ALL'].sum()
         added_value = summary_df['MARŻA'].sum()
         robocizna = 1050 * 50
         wynik_działu = added_value - robocizna
-        output_df = summary_df[['ILOSC', 'KOSZT_OPAKOWAN_ALL', 'SR_CENA', 'ŚR_CENA_HURT', 'MARŻA', 'WYNIK']]
+        output_df = summary_df[['ILOSC', 'WARTOSC','KOSZT_OPAKOWAN_ALL', 'SR_CENA', 'ŚR_CENA_HURT', 'MARŻA', 'WYNIK']]
         return output_df
 
 
@@ -177,6 +179,9 @@ class TreysDepartment(TreysParameters):
     def __map_costs_of_production(self):
         self.trays_sales['PRODUCT_COST'] = self.trays_sales['INDEX_TOW'].map(self.upc_all_products) \
                                            * self.trays_sales['ILOSC']
+        self.trays_sales['UPC'] = self.trays_sales['INDEX_TOW'].map(self.upc_all_products)
+        # adds acquisition cost
+        self.trays_sales['ACQ_COST'] = self.trays_sales['TOWAR'].map(self.acquisition_cost)
 
     def __update_prices_for_TwistSK(self):
         # We have to change price manually for VAC-Breast sold for TWIST-SK with production price
@@ -200,6 +205,7 @@ class TreysDepartment(TreysParameters):
 
         :return: DataFrame
         """
+        print(self.acquisition_cost)
 
         summary_df = self.trays_sales.groupby('TOWAR').sum()
 

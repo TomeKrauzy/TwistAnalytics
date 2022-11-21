@@ -1,6 +1,20 @@
 import pandas as pd
 from UnitProductionCostsCalculator.UnitProductionCostsCalculator import UnitProductionCostsCalculator
+from LifestockPurchusePriceSplit.LifesockPurchusePriceSplitter import LifestockPurchasePriceSplitter
 
+product_map = {63: [1795, 13887, 13888],  # filet
+                   7437: [10, 13885, 13886],  # ćwiartka
+                   260: [13884],  # tuszka
+                   248: [202, 13891, 13892],  # udziec
+                   240: [356, 13893, 13894],  # podudzie
+                   9859: [271],  # udziec T
+                   12013: [14341],  # noga T
+                   60: [674, 13889, 13890],  # noga
+                   61: [418, 13895, 13896],  # skrzydła
+                   156: [13897],  # porcja
+                   74: [],  # serce
+                   183: [],  # żołądek
+                   }
 
 class TreysParameters:
     """ This class represents standard parameters used in departament

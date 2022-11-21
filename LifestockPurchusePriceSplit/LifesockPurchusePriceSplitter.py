@@ -1,5 +1,5 @@
 import pandas as pd
-from GlobalParameters.ProductionParameters import ProductionParameters
+from GlobalParameters.ProductionParameters import *
 
 
 class LifestockPurchasePriceSplitter():
@@ -19,6 +19,32 @@ class LifestockPurchasePriceSplitter():
         result_df = pd.concat([self.__split_quarter_acquisition_price()['koszt_pozyskania_towaru [zł/kg]'],
                                self.__provide_acquisition_cost_primary_products()['koszt_pozyskania_towaru [zł/kg]']])
         return result_df
+
+    def provide_acq_treys_products(self):
+        """Adds acq for treys products, which is same as for base products equivalent
+
+        :return: DataFrame with all upc for all products
+        """
+        acq = self.provide_acquisition_cost_all_products()
+        acq = acq.reset_index()
+
+        # We add product index
+        d_swap = {v: k for k, v in ClassificationData.products_labels.items()}
+        acq['INDEX_TOW'] = acq['TOWAR'].map(d_swap)
+        acq = acq.set_index('INDEX_TOW')
+
+
+        # Adds acq to products for treys
+        trays_acq = {}
+        for base_product_index, trays_product in ClassificationData.product_map.items():
+            for product in trays_product:
+                trays_acq[product] = acq.loc[base_product_index].iat[1]
+        trays_acq_df = pd.DataFrame.from_dict(trays_acq, orient='index', columns=['koszt_pozyskania_towaru [zł/kg]'])
+        df = pd.concat([trays_acq_df, acq])
+        df['TOWAR'] = df.index.map(ClassificationData.products_labels)
+
+        return df
+
 
     def __provide_acquisition_cost_primary_products(self):
         """Distributes lifestock price among elements according to specific methodology, for further understanding

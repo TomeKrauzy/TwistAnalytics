@@ -1,0 +1,8 @@
+from GlobalParameters.ProductionParameters import ProductionParameters
+from GlobalParameters.ClassificationData import ClassificationData
+from LifestockPurchusePriceSplit.LifesockPurchusePriceSplitter import LifestockPurchasePriceSplitter
+import pandas as pd
+
+
+class DeboningDepartmentProfitabilityReportGenerator:
+    pass

@@ -49,9 +49,10 @@ from UnitProductionCostsCalculator.UnitProductionCostsCalculator import UnitProd
 
 tkw_df = UnitProductionCostsCalculator().provide_primary_products_UPC()
 
+acquisition_costs = lifestock_purchuse_price_splitter.provide_acquisition_cost_all_products()
 
 
-treys = TreysDepartment(dataframe_container.sales, wholesale_report)
+treys = TreysDepartment(dataframe_container.sales, wholesale_report, acquisition_costs)
 
 treys_raport = treys.generate_report()
 
@@ -59,9 +60,22 @@ treys_raport.to_excel("raport_tacki_Październik.xlsx",
           sheet_name='Krauzy_Tomasz')
 
 from Reports.Shops.ShopProfitabilityReportGenerator import ShopProfitabilityReportGenerator
-acquisition_costs = lifestock_purchuse_price_splitter.provide_acquisition_cost_all_products()
+
 shop_raport_generator = ShopProfitabilityReportGenerator(dataframe_container.sales, acquisition_costs)
 
-print(shop_raport_generator.generate()[1])
+shops_reports = shop_raport_generator.generate()
+
+# Create a Pandas Excel writer using XlsxWriter as the engine.
+writer = pd.ExcelWriter('/Users/tomaszkrauzy/Desktop/RaportyTwist/shops_report', engine='xlsxwriter')
+
+# Write each dataframe to a different worksheet.
+shops_reports[0].to_excel(writer, sheet_name='Sheet1')
+shops_reports[1].to_excel(writer, sheet_name='Sheet2')
+
+# Close the Pandas Excel writer and output the Excel file.
+writer.save()
 
 
+acq_test = LifestockPurchasePriceSplitter(dataframe_container.production, wholesale_report, avg_lifestock_price).provide_acq_treys_products()
+
+print(acq_test)

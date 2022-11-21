@@ -36,19 +36,6 @@ class UnitProductionCostsCalculator:
         df = df.rename('UPC')
         return df
 
-    def provide_treys_products_UPC(self):
-        """Returns dataframe with upc for treys products
-
-        :return: pd.Series with product id as index and UPC as value
-        """
-
-        trays_upc = {}
-        for base_product_index, trays_product in ClassificationData.products_labels.items():
-            for product in trays_product:
-                trays_upc[product] = upc.loc[base_product_index]
-        df = pd.concat([pd.Series(trays_upc), upc])
-
-        return df
 
     def __provide_carcass_costs_markup(self):
         slaughter_speed = ProductionParameters().SLAUGHTER_SPEED
