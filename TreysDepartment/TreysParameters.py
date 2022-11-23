@@ -1,6 +1,5 @@
 import pandas as pd
 from UnitProductionCostsCalculator.UnitProductionCostsCalculator import UnitProductionCostsCalculator
-from LifestockPurchusePriceSplit.LifesockPurchusePriceSplitter import LifestockPurchasePriceSplitter
 
 product_map = {63: [1795, 13887, 13888],  # filet
                    7437: [10, 13885, 13886],  # ćwiartka

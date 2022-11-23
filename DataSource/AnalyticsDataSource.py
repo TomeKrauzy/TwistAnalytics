@@ -29,7 +29,7 @@ class AnalyticsDataSource:
         :return: dataframe with firm sales data
         """
 
-        sales_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/10.CSV', encoding='latin1', sep=';')
+        sales_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/sales/sales10.CSV', encoding='latin1', sep=';')
         sales_df[['ILOSC', 'WARTOSC', 'SR_CENA']] = sales_df[['ILOSC', 'WARTOSC', 'SR_CENA']].apply(
             lambda x: x.str.replace(',', '.'))
         sales_df[['ILOSC', 'WARTOSC', 'SR_CENA']] = sales_df[['ILOSC', 'WARTOSC', 'SR_CENA']].astype(float)
@@ -46,7 +46,7 @@ class AnalyticsDataSource:
         :return: dataframe with firm costs data
         """
 
-        costs_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/costs_5.CSV', encoding='latin1',
+        costs_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/costs/5_09.22.CSV', encoding='latin1',
                                sep=';')
         costs_df.columns.values[0] = 'KONTO'
         costs_df.columns.values[1] = "KATEGORIA"
@@ -63,12 +63,12 @@ class AnalyticsDataSource:
         return costs_df
 
     def __provide_lifestock_dataframe(self):
-        """Gets lifestock purchuse data and returns pandas dataframe
+        """Gets lifestock purchase data and returns pandas dataframe
 
         :return: dataframe with firm costs data
         """
 
-        lifestock_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/żywiec1.CSV', encoding='latin1',
+        lifestock_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/lifestock/lifestock10.CSV', encoding='latin1',
                                    sep=';')
         lifestock_df[['WARTOSC']] = lifestock_df[['WARTOSC']].apply(
             lambda x: x.str.replace(',', '.'))
@@ -81,11 +81,11 @@ class AnalyticsDataSource:
         :return: dataframe with firm production amounts
         """
 
-        sales_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/10.CSV', encoding='latin1', sep=';')
+        sales_df = pd.read_csv('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/sales/sales10.CSV', encoding='latin1', sep=';')
         return sales_df
 
     def __provide_yelds(self):
-        with open('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/uzyski.txt') as f:
+        with open('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/GeneralData/yields.txt') as f:
             products_yield = {int(k): v for k, v in json.load(f).items()}
 
         products_names = ClassificationData.products_labels

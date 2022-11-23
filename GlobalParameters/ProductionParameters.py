@@ -5,7 +5,7 @@ import json
 
 
 def provide_yelds():
-    with open('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/uzyski.txt') as f:
+    with open('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/GeneralData/yields.txt') as f:
         products_yield = {int(k): v for k, v in json.load(f).items()}
 
     products_names = ClassificationData.products_labels

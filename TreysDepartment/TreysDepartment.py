@@ -1,9 +1,6 @@
-import pandas as pd
 import numpy as np
 from TreysDepartment.TreysParameters import TreysParameters
 from GlobalParameters.ClassificationData import ClassificationData
-
-pd.set_option('display.float_format', lambda x: '%.3f' % x)
 
 
 class TreysDepartment(TreysParameters):
@@ -23,27 +20,40 @@ class TreysDepartment(TreysParameters):
         self.__update_prices_for_TwistSK()
         self.summary_df = self.__provide_summary_df()
 
-    def generate_report(self):
+    def generate_reports(self):
         """ Generates report for trays departament
 
-        :return: DataFrame with columns: ['ILOSC', 'KOSZT_OPAKOWAN_ALL', 'SR_CENA', 'ŚR_CENA_HURT', 'MARŻA', 'WYNIK']
+        :return: DataFrame with columns: ['ILOSC', 'KOSZT_OPAKOWAN_ALL',
+         'SR_CENA', 'ŚR_CENA_HURT', 'MARŻA', 'WYNIK']
         """
+        # DataFrame with detailed info for treys departament
+        detailed_df = self.trays_sales[['NAZ_KONTR', 'TOWAR', 'ILOSC', 'SR_CENA', 'WARTOSC',
+                                        'OPAKOWANIE', 'KARTON', 'Q_KARTON',
+                                        'Q_OPAKOWAN',
+                                        'KOSZT_OPAKOWAN',
+                                        'KOSZT_KARTON', 'KOSZT_ETYKIETA', 'KOSZT_ABSORBER']]
 
+        # Summary df
         summary_df = self.summary_df
         summary_df['KOSZT_OPAKOWAN_ALL'] = summary_df['KOSZT_OPAKOWAN'] + summary_df['KOSZT_KARTON'] \
                                            + summary_df['KOSZT_ETYKIETA'] + summary_df['KOSZT_ABSORBER']
         summary_df['SR_CENA'] = summary_df['WARTOSC'] / summary_df['ILOSC']
-        summary_df['MARŻA'] = (summary_df['SR_CENA'] - summary_df['ŚR_CENA_HURT']) * summary_df['ILOSC']
-        summary_df['WYNIK'] = summary_df['MARŻA'] - summary_df['KOSZT_OPAKOWAN_ALL']
+        summary_df['JK.PAKOWANIA'] = summary_df['KOSZT_OPAKOWAN_ALL'] / summary_df['ILOSC']
+        summary_df['JKW'] = summary_df['UPC'] + summary_df['ACQ_COST'] + summary_df['JK.PAKOWANIA']
+        summary_df['MARŻA % TACKI'] = summary_df['SR_CENA'] / summary_df['JKW']
+        summary_df['ZYSK/STRATA'] = (summary_df['SR_CENA'] - summary_df['JKW']) * summary_df['ILOSC']
+        summary_df['MARŻA % HURT'] = summary_df['ŚR_CENA_HURT'] / (summary_df['UPC'] + summary_df['ACQ_COST'])
 
-
-        real_income = summary_df['WARTOSC'].sum() - summary_df['KOSZT_OPAKOWAN_ALL'].sum()
-        added_value = summary_df['MARŻA'].sum()
-        robocizna = 1050 * 50
-        wynik_działu = added_value - robocizna
-        output_df = summary_df[['ILOSC', 'WARTOSC','KOSZT_OPAKOWAN_ALL', 'SR_CENA', 'ŚR_CENA_HURT', 'MARŻA', 'WYNIK']]
-        return output_df
-
+        output_df = summary_df[['ILOSC', 'WARTOSC',
+                                'SR_CENA', 'ŚR_CENA_HURT',
+                                'UPC', 'ACQ_COST', 'JK.PAKOWANIA', 'JKW',
+                                'MARŻA % TACKI',
+                                'MARŻA % HURT',
+                                'KOSZT_OPAKOWAN_ALL',
+                                'ZYSK/STRATA'
+                                ]
+        ]
+        return (output_df, detailed_df)
 
     # region Methods used for preparing data for raports
 
@@ -150,7 +160,7 @@ class TreysDepartment(TreysParameters):
             box_quantity.append(q_karton)
         self.trays_sales['KARTON'] = box_type
         self.trays_sales['Q_KARTON'] = box_quantity
-        self.trays_sales['Q_OPAKOWAN'] = package_q
+        self.trays_sales['Q_OPAKOWAN'] = package_quantity
         self.trays_sales['KOSZT_OPAKOWAN'] = packaging_cost
 
         # maps boxes costs
@@ -179,13 +189,10 @@ class TreysDepartment(TreysParameters):
     def __map_costs_of_production(self):
         self.trays_sales['PRODUCT_COST'] = self.trays_sales['INDEX_TOW'].map(self.upc_all_products) \
                                            * self.trays_sales['ILOSC']
-        self.trays_sales['UPC'] = self.trays_sales['INDEX_TOW'].map(self.upc_all_products)
-        # adds acquisition cost
-        self.trays_sales['ACQ_COST'] = self.trays_sales['TOWAR'].map(self.acquisition_cost)
 
     def __update_prices_for_TwistSK(self):
         # We have to change price manually for VAC-Breast sold for TWIST-SK with production price
-        avg_vac_breast_sk_price = 4.4 * 4.0
+        avg_vac_breast_sk_price = 4.4 * 3.8
         self.trays_sales['SR_CENA'] = np.where((self.trays_sales['KOD_KONTR'] == 4674)
                                                & (self.trays_sales['INDEX_TOW'] == 1795),
                                                avg_vac_breast_sk_price,
@@ -205,7 +212,6 @@ class TreysDepartment(TreysParameters):
 
         :return: DataFrame
         """
-        print(self.acquisition_cost)
 
         summary_df = self.trays_sales.groupby('TOWAR').sum()
 
@@ -230,8 +236,9 @@ class TreysDepartment(TreysParameters):
                         self.avg_wholesale_prices[self.avg_wholesale_prices['INDEX_TOW'] == key]['ŚR_CENA'].iat[0])
         summary_df['ŚR_CENA_HURT'] = avg_prices_for_primary_products
 
+        summary_df['UPC'] = summary_df['INDEX_TOW'].map(self.upc_all_products)
+        # adds acquisition cost
+        summary_df['ACQ_COST'] = summary_df['INDEX_TOW'].map(self.acquisition_cost['koszt_pozyskania_towaru [zł/kg]'])
         return summary_df
 
     # endregion
-
-

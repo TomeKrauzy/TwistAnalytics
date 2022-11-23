@@ -21,8 +21,6 @@ class SalesReportGenerator():
 
     def __create_shops_report(self):
         df = self.sales_dataframe
-        print(df.columns
-              )
 
         stores_sales = df[df['KOD_KONTR'].isin(self.stores_dataframe)]
         stores_sales = stores_sales.groupby('NAZ_KONTR').agg({'ILOSC': 'sum'})

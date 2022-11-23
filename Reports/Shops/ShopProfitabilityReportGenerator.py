@@ -12,7 +12,7 @@ class ShopProfitabilityReportGenerator:
         self.shops_id = ClassificationData.stores_labels
         self.item_id = ClassificationData.products_labels
         self.acquisition_cost = acquisition_cost_df
-        self.shop_rents = pd.read_excel('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/shop_rents.xlsx')
+        self.shop_rents = pd.read_excel('/Users/tomaszkrauzy/Desktop/DataForTwistAnalytics/GeneralData/shop_rents.xlsx')
 
     def generate(self):
         """Generates dataframes for shops
@@ -22,11 +22,11 @@ class ShopProfitabilityReportGenerator:
         df = self.__prepare_data()
         # more detailed summary
         df_summary = df.groupby(['NAZ_KONTR', 'TOWAR']).sum()[['ILOSC', 'WARTOSC', 'PROD_COST']]
+
         df_result = df.groupby(['NAZ_KONTR']).sum()[['ILOSC', 'WARTOSC', 'PROD_COST']]
-        df_result['WYNIK'] = df_result['WARTOSC'] - df_result['PROD_COST']
         # adding rent column
         df_result = df_result.merge(self.shop_rents, on='NAZ_KONTR')
-        df_result['WYNIK_SKLEPU'] = df_result['WYNIK'] - df_result['RENT']
+        df_result['WYNIK_SKLEPU'] = df_result['WARTOSC'] - df_result['RENT'] - df_result['PROD_COST']
         df_result = df_result.set_index('NAZ_KONTR')
 
         return (df_result, df_summary)

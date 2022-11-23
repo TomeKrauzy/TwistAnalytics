@@ -38,7 +38,6 @@ class AverageSalesPricesReportGenerator:
         stores_sales = df[df['KOD_KONTR'].isin(self.stores_dataframe)]
         stores_sales = stores_sales.groupby('TOWAR').agg({'ILOSC': 'sum', 'WARTOSC': 'sum'})
 
-        print(stores_sales['ILOSC'])
         stores_sales['ŚR_CENA'] = stores_sales['WARTOSC'] / stores_sales['ILOSC']
         stores_sales = stores_sales.sort_values('ŚR_CENA', ascending=False)[['ILOSC', 'ŚR_CENA']]
 

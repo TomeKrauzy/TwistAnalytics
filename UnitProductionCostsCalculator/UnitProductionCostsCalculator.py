@@ -2,7 +2,6 @@ from Products.Products import *
 import pandas as pd
 from CostsCategorizer.CostsCategorizer import CostsCategorizer
 from DataSource.AnalyticsDataSource import AnalyticsDataSource
-from GlobalParameters.ClassificationData import ClassificationData
 
 
 class UnitProductionCostsCalculator:

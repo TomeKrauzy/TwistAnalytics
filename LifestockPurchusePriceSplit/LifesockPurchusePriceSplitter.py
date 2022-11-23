@@ -1,8 +1,7 @@
-import pandas as pd
 from GlobalParameters.ProductionParameters import *
 
 
-class LifestockPurchasePriceSplitter():
+class LifestockPurchasePriceSplitter:
 
     def __init__(self, production_resource_dataframe, avg_wholesales_prices, avg_lifestock_price):
         self.production_resource_dataframe = production_resource_dataframe
