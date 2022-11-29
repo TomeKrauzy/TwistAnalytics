@@ -1,17 +1,17 @@
 # TwistAnalytics
-> Project to manage poultry production firm's data and managerial accountng reports to create more data-drven decisions. 
+> Project to manage poultry production company data and managerial accountng reports to create more data-driven decisions. 
 
 ## Table of Contents
 * [General Info](#general-information)
 * [Technologies Used](#technologies-used)
 * [Features](#features)
-* [Packages used](#packages-used)
+* [Packages Used](#packages-used)
 * [Project Status](#project-status)
 <!-- * [License](#license) -->
 
 
 ## General Information
-- Project is a tool for analysing data for poultry processing firm. It was created for company board to eneable more data-diven decisions through automated raports and analysis
+- Project is a data analysis tool build for poultry processing company. It was created for company board to enable more data-driven decisions through automated reports and analysis
 - I did undertake this projects to create tool for real-world problem and to sharpen my coding skills
 
 ## Technologies Used
